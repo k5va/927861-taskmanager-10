@@ -16,3 +16,4 @@ build/
 
 # Сборка webpack
 public/**/*.js
+public/**/*.js.map
