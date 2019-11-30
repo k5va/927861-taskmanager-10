@@ -15,7 +15,7 @@ const getRandomArrayItem = (array) => array[getRandomIntegerNumber(0, array.leng
  * @param {Number} max - max value
  * @return {Number} - random integer number
  */
-const getRandomIntegerNumber = (min, max) => min + Math.floor((max - min) * Math.random());
+const getRandomIntegerNumber = (min = 0, max = 10) => min + Math.floor((max - min) * Math.random());
 
 /**
  * Returns random date that lies within the given range from the current date
