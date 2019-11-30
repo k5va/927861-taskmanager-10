@@ -5,6 +5,7 @@ import {createTaskTemplate} from "./components/task";
 import {createLoadMoreTemplate} from "./components/load-more";
 import {createTaskFormTemplate} from "./components/task-form";
 import {generateTasks} from "./mock/task";
+import {generateFilters} from "./mock/filter";
 
 const TASK_COUNT = 3;
 
@@ -25,7 +26,7 @@ const controlElement = mainElement.querySelector(`.main__control`);
 // render site menu
 render(controlElement, createSiteMenuTemplate());
 // render filter
-render(mainElement, createFilterTemplate());
+render(mainElement, createFilterTemplate(generateFilters()));
 // render board (tasks list)
 render(mainElement, createBoardTemplate());
 
