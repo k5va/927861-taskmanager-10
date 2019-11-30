@@ -4,6 +4,7 @@ import {createBoardTemplate} from "./components/board";
 import {createTaskTemplate} from "./components/task";
 import {createLoadMoreTemplate} from "./components/load-more";
 import {createTaskFormTemplate} from "./components/task-form";
+import {generateTasks} from "./mock/task";
 
 const TASK_COUNT = 3;
 
@@ -31,12 +32,11 @@ render(mainElement, createBoardTemplate());
 const boardElement = mainElement.querySelector(`.board`);
 const tasksListElement = boardElement.querySelector(`.board__tasks`);
 
+const generatedTasks = generateTasks(TASK_COUNT);
 // render add/edit task form
-render(tasksListElement, createTaskFormTemplate());
+render(tasksListElement, createTaskFormTemplate(generatedTasks[0]));
 // render tasks
-new Array(TASK_COUNT)
-  .fill(``)
-  .forEach(() => render(tasksListElement, createTaskTemplate()));
+generatedTasks.slice(1).forEach((task) => render(tasksListElement, createTaskTemplate(task)));
 
 // render load more button
 render(boardElement, createLoadMoreTemplate());
