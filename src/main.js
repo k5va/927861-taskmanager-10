@@ -7,7 +7,8 @@ import {createTaskFormTemplate} from "./components/task-form";
 import {generateTasks} from "./mock/task";
 import {generateFilters} from "./mock/filter";
 
-const TASK_COUNT = 3;
+const TASK_COUNT = 22;
+const TASKS_PER_LOAD = 8;
 
 /**
  * Renders given HTML template to the DOM by adding it to the parent container
@@ -37,7 +38,23 @@ const generatedTasks = generateTasks(TASK_COUNT);
 // render add/edit task form
 render(tasksListElement, createTaskFormTemplate(generatedTasks[0]));
 // render tasks
-generatedTasks.slice(1).forEach((task) => render(tasksListElement, createTaskTemplate(task)));
+generatedTasks.slice(1, TASKS_PER_LOAD).forEach((task) => render(tasksListElement, createTaskTemplate(task)));
 
 // render load more button
 render(boardElement, createLoadMoreTemplate());
+
+let renderedTasksCount = TASKS_PER_LOAD;
+const loadMoreButton = document.querySelector(`.load-more`);
+loadMoreButton.addEventListener(`click`, () => {
+  // render new portion of tasks
+  generatedTasks.slice(renderedTasksCount, renderedTasksCount + TASKS_PER_LOAD)
+    .forEach((task) => render(tasksListElement, createTaskTemplate(task)));
+  // scroll to make load more button visible on page
+  loadMoreButton.scrollIntoView();
+  // update rendered tasks counter and check if there are more tasks to load
+  renderedTasksCount += TASKS_PER_LOAD;
+  if (renderedTasksCount >= TASK_COUNT) {
+    // no more tasks to load
+    loadMoreButton.remove();
+  }
+});
