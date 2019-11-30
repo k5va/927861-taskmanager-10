@@ -1,3 +1,5 @@
+import {MonthNames} from "../const";
+
 const DATE_MAX_RANGE = 7;
 
 /**
@@ -36,4 +38,31 @@ const getRandomDate = (range = DATE_MAX_RANGE) => {
  */
 const getRandomBoolean = () => Math.random() > 0.5;
 
-export {getRandomArrayItem, getRandomDate, getRandomBoolean};
+/**
+ * Formates date to string
+ * @param {Date} date - date object
+ * @return {String} - formated date
+ */
+const formatDate = (date) => `${date.getDate()} ${MonthNames[date.getMonth()]}`;
+
+/**
+ *Formats given integer number by addig leading zero if it contains only one digit
+ * @param {Number} num - integer to be formatted
+ * @return {String} - formatted value
+ */
+const formatNumber = (num) => num < 10 ? `0${num}` : `${num}`;
+
+/**
+ * Formates time to string
+ * @param {Date} date - date object
+ * @return {String} - formated time
+ */
+const formatTime = (date) => {
+  const timeZone = date.getHours() > 11 ? `PM` : `AM`;
+  const hours = formatNumber(date.getHours() % 12);
+  const minutes = formatNumber(date.getMinutes());
+
+  return `${hours}:${minutes} ${timeZone}`;
+};
+
+export {getRandomArrayItem, getRandomDate, getRandomBoolean, formatDate, formatTime};
