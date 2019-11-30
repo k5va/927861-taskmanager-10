@@ -78,5 +78,6 @@ export {
   getRandomBoolean,
   formatDate,
   formatTime,
-  isDateExpired
+  isDateExpired,
+  getRandomIntegerNumber
 };
