@@ -65,4 +65,18 @@ const formatTime = (date) => {
   return `${hours}:${minutes} ${timeZone}`;
 };
 
-export {getRandomArrayItem, getRandomDate, getRandomBoolean, formatDate, formatTime};
+/**
+ * Checks if date is expired
+ * @param {Date} date - date to be checked
+ * @return {Boolean} - is date expired
+ */
+const isDateExpired = (date) => date instanceof Date && date < Date.now();
+
+export {
+  getRandomArrayItem,
+  getRandomDate,
+  getRandomBoolean,
+  formatDate,
+  formatTime,
+  isDateExpired
+};
