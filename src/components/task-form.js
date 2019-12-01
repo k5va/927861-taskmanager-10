@@ -1,4 +1,4 @@
-import {formatDate, formatTime, isDateExpired} from "../utils/utils";
+import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../utils/utils";
 import {Colors} from "../const";
 
 /**
@@ -74,7 +74,7 @@ export const createTaskFormTemplate = (task) => {
   const date = isDateShowing ? formatDate(dueDate) : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
-  const isRepeated = Object.values(repeatingDays).some(Boolean);
+  const isRepeated = hasSomeBoolean(repeatingDays);
   const repeatClass = isRepeated ? `card--repeat` : ``;
 
   const hashtagsMarkup = createHashTagsTemplate(tags);

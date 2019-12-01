@@ -1,4 +1,4 @@
-import {formatDate, formatTime, isDateExpired} from "../utils/utils";
+import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../utils/utils";
 
 /**
  * Creates hashtags list HTML template
@@ -24,7 +24,7 @@ export const createTaskTemplate = (task) => {
   const date = isDateShowing ? formatDate(dueDate) : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
-  const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
+  const repeatClass = hasSomeBoolean(repeatingDays) ? `card--repeat` : ``;
 
   const hashtags = createHashTagsTemplate(tags);
 
