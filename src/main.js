@@ -23,18 +23,18 @@ const render = (container, template, place = `beforeend`) => {
 
 const mainElement = document.querySelector(`.main`);
 const controlElement = mainElement.querySelector(`.main__control`);
+const generatedTasks = generateTasks(TASK_COUNT);
 
 // render site menu
 render(controlElement, createSiteMenuTemplate());
 // render filter
-render(mainElement, createFilterTemplate(generateFilters()));
+render(mainElement, createFilterTemplate(generateFilters(generatedTasks)));
 // render board (tasks list)
 render(mainElement, createBoardTemplate());
 
 const boardElement = mainElement.querySelector(`.board`);
 const tasksListElement = boardElement.querySelector(`.board__tasks`);
 
-const generatedTasks = generateTasks(TASK_COUNT);
 // render add/edit task form
 render(tasksListElement, createTaskFormTemplate(generatedTasks[0]));
 // render tasks
