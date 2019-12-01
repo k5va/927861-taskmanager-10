@@ -1,6 +1,5 @@
 import {isDateExpired, isDateToday, hasSomeBoolean} from "../utils/utils";
-
-const filterNames = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
+import {FilterNames} from "../const";
 
 const FilterTasksCounter = {
   'all': (tasks) => tasks.length,
@@ -17,7 +16,7 @@ const FilterTasksCounter = {
  * @param {Array<*>} tasks - tasks array
  * @return {Array<*>} - array of generated filters
  */
-const generateFilters = (tasks) => filterNames
+const generateFilters = (tasks) => FilterNames
   .map((name) => ({
     name,
     count: FilterTasksCounter[name](tasks),
