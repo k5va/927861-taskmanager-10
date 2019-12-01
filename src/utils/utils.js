@@ -72,6 +72,20 @@ const formatTime = (date) => {
  */
 const isDateExpired = (date) => date instanceof Date && date < Date.now();
 
+/**
+ * Checks if date is due today
+ * @param {Date} date - date to be checked
+ * @return {Boolean} - is date due today
+ */
+const isDateToday = (date) => date instanceof Date && date.toDateString() === new Date().toDateString();
+
+/**
+ * Returns true if object has some Boolean property
+ * @param {Object} obj - some object
+ * @return {Boolean} - true if object has some Boolean property
+ */
+const hasSomeBoolean = (obj) => Object.values(obj).some(Boolean);
+
 export {
   getRandomArrayItem,
   getRandomDate,
@@ -79,5 +93,6 @@ export {
   formatDate,
   formatTime,
   isDateExpired,
-  getRandomIntegerNumber
+  isDateToday,
+  hasSomeBoolean
 };
