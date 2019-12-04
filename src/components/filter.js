@@ -1,10 +1,13 @@
+import Component from "./component";
+
 const DEFAULT_SELECTED_FILTER = 0;
+
 /**
  * Creates filter html template
  * @param {Array<*>} filters - array of filters
  * @return {String} template
  */
-export const createFilterTemplate = (filters) => {
+const createFilterTemplate = (filters) => {
   const filtersMarkup = filters
     .map(({name, count}, index) => `<input
                               type="radio"
@@ -20,3 +23,9 @@ export const createFilterTemplate = (filters) => {
 
   return `<section class="main__filter filter container">${filtersMarkup}</section>`;
 };
+
+export default class Filter extends Component {
+  constructor(filters) {
+    super(createFilterTemplate(filters));
+  }
+}
