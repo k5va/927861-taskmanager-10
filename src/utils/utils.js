@@ -86,6 +86,41 @@ const isDateToday = (date) => date instanceof Date && date.toDateString() === ne
  */
 const hasSomeBoolean = (obj) => Object.values(obj).some(Boolean);
 
+/**
+ * Creates HTML element from given template
+ * @param {String} template - template to create HTML element from
+ * @return {HTMLElement} - created element
+ */
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+const RenderPosition = {
+  AFTER_BEGIN: `afterbegin`,
+  BEFORE_END: `beforeend`
+};
+
+/**
+ * Renders given HTML element to the DOM by adding it to the parent container
+ * at the specified position
+ * @param {HTMLElement} container - parent HTML element
+ * @param {HTMLElement} element - element to be added to the container
+ * @param {String} place - insert position. Default value = "beforeend"
+ */
+const render = (container, element, place = RenderPosition.BEFORE_END) => {
+  switch (place) {
+    case RenderPosition.AFTER_BEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFORE_END:
+      container.append(element);
+      break;
+  }
+};
+
 export {
   getRandomArrayItem,
   getRandomDate,
@@ -94,5 +129,8 @@ export {
   formatTime,
   isDateExpired,
   isDateToday,
-  hasSomeBoolean
+  hasSomeBoolean,
+  createElement,
+  render,
+  RenderPosition
 };
