@@ -1,6 +1,6 @@
-export const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
+const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
 
-export const MONTH_NAMES = [
+const MONTH_NAMES = [
   `January`,
   `February`,
   `March`,
@@ -15,4 +15,6 @@ export const MONTH_NAMES = [
   `December`
 ];
 
-export const FILTERS = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
+const FILTERS = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
+
+export {COLORS, MONTH_NAMES, FILTERS};
