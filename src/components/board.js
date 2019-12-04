@@ -1,4 +1,3 @@
-import {createElement} from "../utils/utils";
 import Component from "./component";
 
 /**
