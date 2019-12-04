@@ -16,31 +16,31 @@ const controlElement = mainElement.querySelector(`.main__control`);
 const generatedTasks = generateTasks(TASK_COUNT);
 
 // render site menu
-render(controlElement, new SiteMenu().getElement());
+render(controlElement, new SiteMenu());
 // render filter
-render(mainElement, new Filter(generateFilters(generatedTasks)).getElement());
+render(mainElement, new Filter(generateFilters(generatedTasks)));
 // render board (tasks list)
-render(mainElement, new Board().getElement());
+render(mainElement, new Board());
 
 const boardElement = mainElement.querySelector(`.board`);
 const tasksListElement = boardElement.querySelector(`.board__tasks`);
 
 // render add/edit task form
-render(tasksListElement, new TaskForm(generatedTasks[0]).getElement());
+render(tasksListElement, new TaskForm(generatedTasks[0]));
 // render tasks
 generatedTasks
   .slice(1, TASKS_PER_LOAD)
-  .forEach((task) => render(tasksListElement, new Task(task).getElement()));
+  .forEach((task) => render(tasksListElement, new Task(task)));
 
 const loadMore = new LoadMore();
 // render load more button
-render(boardElement, loadMore.getElement());
+render(boardElement, loadMore);
 
 let renderedTasksCount = TASKS_PER_LOAD;
 loadMore.getElement().addEventListener(`click`, () => {
   // render new portion of tasks
   generatedTasks.slice(renderedTasksCount, renderedTasksCount + TASKS_PER_LOAD)
-    .forEach((task) => render(tasksListElement, new Task(task).getElement()));
+    .forEach((task) => render(tasksListElement, new Task(task)));
   // scroll to make load more button visible on page
   loadMore.getElement().scrollIntoView();
   // update rendered tasks counter and check if there are more tasks to load
