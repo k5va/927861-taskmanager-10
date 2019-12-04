@@ -1,4 +1,5 @@
 import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../utils/utils";
+import Component from "./component";
 
 /**
  * Creates hashtags list HTML template
@@ -15,7 +16,7 @@ const createHashTagsTemplate = (tags) => [...tags]
  * @param {*} task - task object
  * @return {String} template
  */
-export const createTaskTemplate = (task) => {
+const createTaskTemplate = (task) => {
   const {description, tags, dueDate, color, repeatingDays} = task;
 
   const deadlineClass = isDateExpired(dueDate) ? `card--deadline` : ``;
@@ -76,3 +77,9 @@ export const createTaskTemplate = (task) => {
 </div>
 </article>`;
 };
+
+export default class Task extends Component {
+  constructor(task) {
+    super(createTaskTemplate(task));
+  }
+}
