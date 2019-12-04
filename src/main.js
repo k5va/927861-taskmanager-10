@@ -11,6 +11,10 @@ import {render} from "./utils/utils";
 const TASK_COUNT = 22;
 const TASKS_PER_LOAD = 8;
 
+/**
+ * Creates task component and renders it to the DOM with edit mode support
+ * @param {*} task - task object
+ */
 const renderTask = (task) => {
   const taskComponent = new Task(task);
   const taskEditComponent = new TaskForm(task);
