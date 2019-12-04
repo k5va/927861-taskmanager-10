@@ -11,6 +11,23 @@ import {render} from "./utils/utils";
 const TASK_COUNT = 22;
 const TASKS_PER_LOAD = 8;
 
+const renderTask = (task) => {
+  const taskComponent = new Task(task);
+  const taskEditComponent = new TaskForm(task);
+
+  const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
+  editButton.addEventListener(`click`, () => {
+    taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+  });
+
+  const editForm = taskEditComponent.getElement().querySelector(`form`);
+  editForm.addEventListener(`submit`, () => {
+    taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  });
+
+  render(taskListElement, taskComponent);
+};
+
 const mainElement = document.querySelector(`.main`);
 const controlElement = mainElement.querySelector(`.main__control`);
 const generatedTasks = generateTasks(TASK_COUNT);
@@ -23,14 +40,12 @@ render(mainElement, new Filter(generateFilters(generatedTasks)));
 render(mainElement, new Board());
 
 const boardElement = mainElement.querySelector(`.board`);
-const tasksListElement = boardElement.querySelector(`.board__tasks`);
+const taskListElement = boardElement.querySelector(`.board__tasks`);
 
-// render add/edit task form
-render(tasksListElement, new TaskForm(generatedTasks[0]));
 // render tasks
 generatedTasks
-  .slice(1, TASKS_PER_LOAD)
-  .forEach((task) => render(tasksListElement, new Task(task)));
+  .slice(0, TASKS_PER_LOAD)
+  .forEach((task) => renderTask(task));
 
 const loadMore = new LoadMore();
 // render load more button
@@ -40,7 +55,7 @@ let renderedTasksCount = TASKS_PER_LOAD;
 loadMore.getElement().addEventListener(`click`, () => {
   // render new portion of tasks
   generatedTasks.slice(renderedTasksCount, renderedTasksCount + TASKS_PER_LOAD)
-    .forEach((task) => render(tasksListElement, new Task(task)));
+    .forEach((task) => renderTask(task));
   // scroll to make load more button visible on page
   loadMore.getElement().scrollIntoView();
   // update rendered tasks counter and check if there are more tasks to load
