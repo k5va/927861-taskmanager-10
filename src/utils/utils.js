@@ -1,4 +1,4 @@
-import {MonthNames} from "../const";
+import {MONTH_NAMES} from "../const";
 
 const DATE_MAX_RANGE = 7;
 
@@ -43,7 +43,7 @@ const getRandomBoolean = () => Math.random() > 0.5;
  * @param {Date} date - date object
  * @return {String} - formated date
  */
-const formatDate = (date) => `${date.getDate()} ${MonthNames[date.getMonth()]}`;
+const formatDate = (date) => `${date.getDate()} ${MONTH_NAMES[date.getMonth()]}`;
 
 /**
  *Formats given integer number by addig leading zero if it contains only one digit
