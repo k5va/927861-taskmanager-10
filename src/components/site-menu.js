@@ -1,8 +1,10 @@
+import Component from "./component";
+
 /**
  * Creates site menu html template
  * @return {String} template
  */
-export const createSiteMenuTemplate = () => {
+const createSiteMenuTemplate = () => {
   return `<section class="control__btn-wrap">
     <input
       type="radio"
@@ -33,3 +35,9 @@ export const createSiteMenuTemplate = () => {
   </section>
 `;
 };
+
+export default class SiteMenu extends Component {
+  constructor() {
+    super(createSiteMenuTemplate());
+  }
+}
