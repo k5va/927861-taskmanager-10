@@ -1,3 +1,4 @@
+import Component from "./component";
 import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../utils/utils";
 import {COLORS} from "../const";
 
@@ -65,7 +66,7 @@ const createColorsTemplate = (currentColor, colors) => colors
  * @param {*} task - task object
  * @return {String} template
  */
-export const createTaskFormTemplate = (task) => {
+const createTaskFormTemplate = (task) => {
   const {description, tags, dueDate, color, repeatingDays} = task;
 
   const deadlineClass = isDateExpired(dueDate) ? `card--deadline` : ``;
@@ -160,3 +161,9 @@ export const createTaskFormTemplate = (task) => {
 </form>
 </article>`;
 };
+
+export default class TaskForm extends Component {
+  constructor(task) {
+    super(createTaskFormTemplate(task));
+  }
+}
