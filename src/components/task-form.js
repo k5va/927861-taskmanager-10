@@ -1,5 +1,6 @@
+import Component from "./component";
 import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../utils/utils";
-import {Colors} from "../const";
+import {COLORS} from "../const";
 
 /**
  * Creates hashtags list HTML template
@@ -65,7 +66,7 @@ const createColorsTemplate = (currentColor, colors) => colors
  * @param {*} task - task object
  * @return {String} template
  */
-export const createTaskFormTemplate = (task) => {
+const createTaskFormTemplate = (task) => {
   const {description, tags, dueDate, color, repeatingDays} = task;
 
   const deadlineClass = isDateExpired(dueDate) ? `card--deadline` : ``;
@@ -80,7 +81,7 @@ export const createTaskFormTemplate = (task) => {
   const hashtagsMarkup = createHashTagsTemplate(tags);
   const repeatingDaysMarkup = createRepeatingDaysTemplate(repeatingDays);
 
-  const colorsMarkup = createColorsTemplate(color, Colors);
+  const colorsMarkup = createColorsTemplate(color, COLORS);
 
   return `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
 <form class="card__form" method="get">
@@ -160,3 +161,9 @@ export const createTaskFormTemplate = (task) => {
 </form>
 </article>`;
 };
+
+export default class TaskForm extends Component {
+  constructor(task) {
+    super(createTaskFormTemplate(task));
+  }
+}

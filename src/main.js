@@ -1,24 +1,35 @@
-import {createSiteMenuTemplate} from "./components/site-menu";
-import {createFilterTemplate} from "./components/filter";
-import {createBoardTemplate} from "./components/board";
-import {createTaskTemplate} from "./components/task";
-import {createLoadMoreTemplate} from "./components/load-more";
-import {createTaskFormTemplate} from "./components/task-form";
+import SiteMenu from "./components/site-menu";
+import Filter from "./components/filter";
+import Board from "./components/board";
+import Task from "./components/task";
+import LoadMore from "./components/load-more";
+import TaskForm from "./components/task-form";
 import {generateTasks} from "./mock/task";
 import {generateFilters} from "./mock/filter";
+import {render} from "./utils/utils";
 
 const TASK_COUNT = 22;
 const TASKS_PER_LOAD = 8;
 
 /**
- * Renders given HTML template to the DOM by adding it to the parent container
- * at the specified position
- * @param {HTMLElement} container - parent HTML element
- * @param {String} template - template to be added to the container
- * @param {String} place - insert position. Default value = "beforeend"
+ * Creates task component and renders it to the DOM with edit mode support
+ * @param {*} task - task object
  */
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
+const renderTask = (task) => {
+  const taskComponent = new Task(task);
+  const taskEditComponent = new TaskForm(task);
+
+  const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
+  editButton.addEventListener(`click`, () => {
+    taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+  });
+
+  const editForm = taskEditComponent.getElement().querySelector(`form`);
+  editForm.addEventListener(`submit`, () => {
+    taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  });
+
+  render(taskListElement, taskComponent);
 };
 
 const mainElement = document.querySelector(`.main`);
@@ -26,35 +37,35 @@ const controlElement = mainElement.querySelector(`.main__control`);
 const generatedTasks = generateTasks(TASK_COUNT);
 
 // render site menu
-render(controlElement, createSiteMenuTemplate());
+render(controlElement, new SiteMenu());
 // render filter
-render(mainElement, createFilterTemplate(generateFilters(generatedTasks)));
+render(mainElement, new Filter(generateFilters(generatedTasks)));
 // render board (tasks list)
-render(mainElement, createBoardTemplate());
+render(mainElement, new Board());
 
 const boardElement = mainElement.querySelector(`.board`);
-const tasksListElement = boardElement.querySelector(`.board__tasks`);
+const taskListElement = boardElement.querySelector(`.board__tasks`);
 
-// render add/edit task form
-render(tasksListElement, createTaskFormTemplate(generatedTasks[0]));
 // render tasks
-generatedTasks.slice(1, TASKS_PER_LOAD).forEach((task) => render(tasksListElement, createTaskTemplate(task)));
+generatedTasks
+  .slice(0, TASKS_PER_LOAD)
+  .forEach((task) => renderTask(task));
 
+const loadMore = new LoadMore();
 // render load more button
-render(boardElement, createLoadMoreTemplate());
+render(boardElement, loadMore);
 
 let renderedTasksCount = TASKS_PER_LOAD;
-const loadMoreButton = document.querySelector(`.load-more`);
-loadMoreButton.addEventListener(`click`, () => {
+loadMore.getElement().addEventListener(`click`, () => {
   // render new portion of tasks
   generatedTasks.slice(renderedTasksCount, renderedTasksCount + TASKS_PER_LOAD)
-    .forEach((task) => render(tasksListElement, createTaskTemplate(task)));
+    .forEach((task) => renderTask(task));
   // scroll to make load more button visible on page
-  loadMoreButton.scrollIntoView();
+  loadMore.getElement().scrollIntoView();
   // update rendered tasks counter and check if there are more tasks to load
   renderedTasksCount += TASKS_PER_LOAD;
   if (renderedTasksCount >= TASK_COUNT) {
     // no more tasks to load
-    loadMoreButton.remove();
+    loadMore.removeElement();
   }
 });
