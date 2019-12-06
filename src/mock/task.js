@@ -1,5 +1,5 @@
 import {COLORS} from '../const.js';
-import {getRandomArrayItem, getRandomDate, getRandomBoolean} from '../utils/utils';
+import {getRandomArrayItem, getRandomDate, getRandomBoolean} from '../utils';
 
 const MAX_TAGS_COUNT = 3;
 const DEFAULT_TASKS_COUNT = 5;

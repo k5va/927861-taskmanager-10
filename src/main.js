@@ -5,7 +5,7 @@ import {
 } from "./components";
 import {generateTasks} from "./mock/task";
 import {generateFilters} from "./mock/filter";
-import {render} from "./utils/utils";
+import {render} from "./utils";
 
 const TASK_COUNT = 22;
 const TASKS_PER_LOAD = 8;

@@ -1,5 +1,5 @@
 import {createHashTags} from "./create-hashtags";
-import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../../utils/utils";
+import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../../utils";
 
 /**
  * Creates task html template

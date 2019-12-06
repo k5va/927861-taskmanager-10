@@ -1,7 +1,7 @@
 import {createHashTags} from "./create-hashtags";
 import {createRepeatingDays} from "./create-repeating-days";
 import {createColors} from "./create-colors";
-import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../../utils/utils";
+import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../../utils";
 import {COLORS} from "../../const";
 
 /**
