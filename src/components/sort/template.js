@@ -1,6 +1,8 @@
-import Component from "./component";
-
-const createSortTemplate = () => {
+/**
+ * Generates sort component's HTML template
+ * @return {String} - template
+ */
+const template = () => {
   return (
     `<div class="board__filter-list">
       <a href="#" class="board__filter">SORT BY DEFAULT</a>
@@ -10,8 +12,4 @@ const createSortTemplate = () => {
   );
 };
 
-export default class Sort extends Component {
-  constructor() {
-    super(createSortTemplate());
-  }
-}
+export {template};
