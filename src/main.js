@@ -1,12 +1,8 @@
-import SiteMenu from "./components/site-menu";
-import Filter from "./components/filter";
-import Board from "./components/board";
-import Task from "./components/task";
-import LoadMore from "./components/load-more";
-import TaskForm from "./components/task-form";
-import Sort from "./components/sort";
-import Tasks from "./components/tasks";
-import NoTasks from "./components/no-tasks";
+import {
+  TaskComponent, TaskFormComponent, MenuComponent,
+  FilterComponent, BoardComponent, NoTasksComponent,
+  SortComponent, TaskListComponent, LoadMoreComponent
+} from "./components";
 import {generateTasks} from "./mock/task";
 import {generateFilters} from "./mock/filter";
 import {render} from "./utils/utils";
@@ -54,14 +50,14 @@ const renderTask = (task, tasksComponent) => {
     );
   };
 
-  const taskComponent = new Task(task);
+  const taskComponent = new TaskComponent(task);
   const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
   editButton.addEventListener(`click`, () => {
     replaceTaskToEdit();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  const taskEditComponent = new TaskForm(task);
+  const taskEditComponent = new TaskFormComponent(task);
   const editForm = taskEditComponent.getElement().querySelector(`form`);
   editForm.addEventListener(`submit`, () => {
     replaceEditToTask();
@@ -76,27 +72,27 @@ const controlElement = mainElement.querySelector(`.main__control`);
 const generatedTasks = generateTasks(TASK_COUNT);
 
 // render site menu
-render(controlElement, new SiteMenu());
+render(controlElement, new MenuComponent());
 // render filter
-render(mainElement, new Filter(generateFilters(generatedTasks)));
+render(mainElement, new FilterComponent(generateFilters(generatedTasks)));
 // render board (tasks list)
-const boardComponent = new Board();
+const boardComponent = new BoardComponent();
 render(mainElement, boardComponent);
 
 // render tasks
 const isAllTasksArchived = generatedTasks.every((task) => task.isArchive);
 if (isAllTasksArchived) {
-  render(boardComponent.getElement(), new NoTasks());
+  render(boardComponent.getElement(), new NoTasksComponent());
 } else {
-  render(boardComponent.getElement(), new Sort());
-  const tasksComponent = new Tasks();
+  render(boardComponent.getElement(), new SortComponent());
+  const tasksComponent = new TaskListComponent();
   render(boardComponent.getElement(), tasksComponent);
 
   generatedTasks
     .slice(0, TASKS_PER_LOAD)
     .forEach((task) => renderTask(task, tasksComponent));
 
-  const loadMoreComponent = new LoadMore();
+  const loadMoreComponent = new LoadMoreComponent();
   // render load more button
   render(boardComponent.getElement(), loadMoreComponent);
 
