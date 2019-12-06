@@ -4,6 +4,9 @@ import Board from "./components/board";
 import Task from "./components/task";
 import LoadMore from "./components/load-more";
 import TaskForm from "./components/task-form";
+import Sort from "./components/sort";
+import Tasks from "./components/tasks";
+import NoTasks from "./components/no-tasks";
 import {generateTasks} from "./mock/task";
 import {generateFilters} from "./mock/filter";
 import {render} from "./utils/utils";
@@ -14,8 +17,9 @@ const TASKS_PER_LOAD = 8;
 /**
  * Creates task component and renders it to the DOM with edit mode support
  * @param {*} task - task object
+ * @param {Component} tasksComponent - tasks component to render tasks
  */
-const renderTask = (task) => {
+const renderTask = (task, tasksComponent) => {
 
   /**
    * Handler for Esc key down event
@@ -34,14 +38,20 @@ const renderTask = (task) => {
    * Changes task component to task form component (edit mode)
    */
   const replaceEditToTask = () => {
-    taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+    tasksComponent.getElement().replaceChild(
+        taskComponent.getElement(),
+        taskEditComponent.getElement()
+    );
   };
 
   /**
   * Changes task edit component back to task component (view mode)
   */
   const replaceTaskToEdit = () => {
-    taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+    tasksComponent.getElement().replaceChild(
+        taskEditComponent.getElement(),
+        taskComponent.getElement()
+    );
   };
 
   const taskComponent = new Task(task);
@@ -58,7 +68,7 @@ const renderTask = (task) => {
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  render(taskListElement, taskComponent);
+  render(tasksComponent.getElement(), taskComponent);
 };
 
 const mainElement = document.querySelector(`.main`);
@@ -70,31 +80,38 @@ render(controlElement, new SiteMenu());
 // render filter
 render(mainElement, new Filter(generateFilters(generatedTasks)));
 // render board (tasks list)
-render(mainElement, new Board());
-
-const boardElement = mainElement.querySelector(`.board`);
-const taskListElement = boardElement.querySelector(`.board__tasks`);
+const boardComponent = new Board();
+render(mainElement, boardComponent);
 
 // render tasks
-generatedTasks
-  .slice(0, TASKS_PER_LOAD)
-  .forEach((task) => renderTask(task));
+const isAllTasksArchived = generatedTasks.every((task) => task.isArchive);
+if (isAllTasksArchived) {
+  render(boardComponent.getElement(), new NoTasks());
+} else {
+  render(boardComponent.getElement(), new Sort());
+  const tasksComponent = new Tasks();
+  render(boardComponent.getElement(), tasksComponent);
 
-const loadMore = new LoadMore();
-// render load more button
-render(boardElement, loadMore);
+  generatedTasks
+    .slice(0, TASKS_PER_LOAD)
+    .forEach((task) => renderTask(task, tasksComponent));
 
-let renderedTasksCount = TASKS_PER_LOAD;
-loadMore.getElement().addEventListener(`click`, () => {
-  // render new portion of tasks
-  generatedTasks.slice(renderedTasksCount, renderedTasksCount + TASKS_PER_LOAD)
-    .forEach((task) => renderTask(task));
-  // scroll to make load more button visible on page
-  loadMore.getElement().scrollIntoView();
-  // update rendered tasks counter and check if there are more tasks to load
-  renderedTasksCount += TASKS_PER_LOAD;
-  if (renderedTasksCount >= TASK_COUNT) {
-    // no more tasks to load
-    loadMore.removeElement();
-  }
-});
+  const loadMoreComponent = new LoadMore();
+  // render load more button
+  render(boardComponent.getElement(), loadMoreComponent);
+
+  let renderedTasksCount = TASKS_PER_LOAD;
+  loadMoreComponent.getElement().addEventListener(`click`, () => {
+    // render new portion of tasks
+    generatedTasks.slice(renderedTasksCount, renderedTasksCount + TASKS_PER_LOAD)
+      .forEach((task) => renderTask(task, tasksComponent));
+    // scroll to make load more button visible on page
+    loadMoreComponent.getElement().scrollIntoView();
+    // update rendered tasks counter and check if there are more tasks to load
+    renderedTasksCount += TASKS_PER_LOAD;
+    if (renderedTasksCount >= TASK_COUNT) {
+      // no more tasks to load
+      loadMoreComponent.removeElement();
+    }
+  });
+}
