@@ -6,4 +6,4 @@ export {default as MenuComponent} from "./site-menu";
 export {default as SortComponent} from "./sort";
 export {default as TaskFormComponent} from "./task-form";
 export {default as TaskComponent} from "./task";
-export {default as TaskListComponent} from "./tasks";
+export {default as TaskListComponent} from "./task-list";
