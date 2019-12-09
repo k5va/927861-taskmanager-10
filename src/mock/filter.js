@@ -1,4 +1,4 @@
-import {isDateExpired, isDateToday, hasSomeBoolean} from "../utils/utils";
+import {isDateExpired, isDateToday, hasSomeBoolean} from "../utils";
 import {FILTERS} from "../const";
 
 const FilterTasksCounter = {
