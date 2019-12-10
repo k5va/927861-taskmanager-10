@@ -3,19 +3,20 @@ import {createElement} from "../../utils";
 export default class AbstractComponent {
   /**
    * Component's costructor
-   * @param {String} template - HTML template string
    */
-  constructor(template) {
+  constructor() {
+    if (new.target === AbstractComponent) {
+      throw new Error(`Can't instantiate AbstractComponent, only concrete one.`);
+    }
+
     this._element = null;
-    this._template = template;
   }
 
   /**
    * Returns component's template
-   * @return {String} - template string
    */
   getTemplate() {
-    return this._template;
+    throw new Error(`Abstract method not implemented: getTemplate`);
   }
 
   /**
@@ -26,7 +27,6 @@ export default class AbstractComponent {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
-
     return this._element;
   }
 
