@@ -15,4 +15,12 @@ export default class TaskForm extends AbstractComponent {
   getTemplate() {
     return template(this._task);
   }
+
+  /**
+   * Sets task form component's submit handler
+   * @param {Function} handler - handler
+   */
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
+  }
 }

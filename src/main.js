@@ -57,8 +57,7 @@ const renderTask = (task, tasksComponent) => {
   });
 
   const taskEditComponent = new TaskFormComponent(task);
-  const editForm = taskEditComponent.getElement().querySelector(`form`);
-  editForm.addEventListener(`submit`, () => {
+  taskEditComponent.setSubmitHandler(() => {
     replaceEditToTask();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
