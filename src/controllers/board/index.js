@@ -1,8 +1,6 @@
 import {SortComponent, TaskListComponent, NoTasksComponent, LoadMoreComponent} from "../../components";
-import {TASKS_PER_LOAD} from "../../consts";
 import {render} from "../../utils";
-import {renderTask} from "./render-task";
-import { renderTasks } from "./render-tasks";
+import {renderTasks} from "./render-tasks";
 
 export default class BoardController {
   /**

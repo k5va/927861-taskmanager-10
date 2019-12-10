@@ -31,7 +31,6 @@ const renderTasks = (tasks, container, taskListComponent, loadMoreComponent) => 
       loadMoreComponent.removeElement();
     }
   });
-
-}
+};
 
 export {renderTasks};
