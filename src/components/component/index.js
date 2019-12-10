@@ -1,6 +1,6 @@
 import {createElement} from "../../utils";
 
-export default class Component {
+export default class AbstractComponent {
   /**
    * Component's costructor
    * @param {String} template - HTML template string
