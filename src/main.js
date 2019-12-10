@@ -95,7 +95,7 @@ if (isAllTasksArchived) {
   render(boardComponent.getElement(), loadMoreComponent);
 
   let renderedTasksCount = TASKS_PER_LOAD;
-  loadMoreComponent.getElement().addEventListener(`click`, () => {
+  loadMoreComponent.setClickHandler(() => {
     // render new portion of tasks
     generatedTasks.slice(renderedTasksCount, renderedTasksCount + TASKS_PER_LOAD)
       .forEach((task) => renderTask(task, tasksComponent));

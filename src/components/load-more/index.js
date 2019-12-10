@@ -9,4 +9,12 @@ export default class LoadMore extends AbstractComponent {
   getTemplate() {
     return template();
   }
+
+  /**
+   * Sets Load more component's click handler
+   * @param {Function} handler - handler
+   */
+  setClickHandler(handler) {
+    this.getElement().addEventListener(`click`, handler);
+  }
 }
