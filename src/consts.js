@@ -16,3 +16,5 @@ export const MONTH_NAMES = [
 ];
 
 export const FILTERS = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
+
+export const TASKS_PER_LOAD = 8;
