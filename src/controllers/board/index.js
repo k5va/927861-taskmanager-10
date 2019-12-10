@@ -29,6 +29,8 @@ export default class BoardController {
 
     // render sort component
     render(this._container.getElement(), this._sortComponent);
+
+    // render tasks
     render(this._container.getElement(), this._taskListComponent);
     renderTasks(tasks, this._container, this._taskListComponent, this._loadMoreComponent);
   }
