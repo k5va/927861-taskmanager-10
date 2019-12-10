@@ -15,4 +15,12 @@ export default class Task extends AbstractComponent {
   getTemplate() {
     return template(this._task);
   }
+
+  /**
+   * Sets task component edit mode handler
+   * @param {Function} handler - handler
+   */
+  setEditHandler(handler) {
+    this.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, handler);
+  }
 }
