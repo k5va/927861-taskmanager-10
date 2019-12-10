@@ -1,6 +1,7 @@
 import {SortComponent, TaskListComponent, NoTasksComponent, LoadMoreComponent} from "../../components";
 import {render} from "../../utils";
 import {renderTasks} from "./render-tasks";
+import {sortTasks} from "./sort-tasks";
 
 export default class BoardController {
   /**
@@ -29,6 +30,12 @@ export default class BoardController {
 
     // render sort component
     render(this._container.getElement(), this._sortComponent);
+    this._sortComponent.setSortTypeChangeHandler((sortType) => renderTasks(
+        sortTasks(tasks, sortType), // sort tasks
+        this._container,
+        this._taskListComponent,
+        this._loadMoreComponent)
+    );
 
     // render tasks
     render(this._container.getElement(), this._taskListComponent);
