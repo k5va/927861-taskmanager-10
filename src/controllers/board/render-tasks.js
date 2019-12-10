@@ -11,13 +11,12 @@ import {render} from "../../utils";
  */
 const renderTasks = (tasks, container, taskListComponent, loadMoreComponent) => {
 
-  taskListComponent.getElement().innerHTML = ``;
-  tasks
-    .slice(0, TASKS_PER_LOAD)
-    .forEach((task) => renderTask(task, taskListComponent));
+  // remove previous tasks from the DOM and render new tasks
+  taskListComponent.resetList();
+  tasks.slice(0, TASKS_PER_LOAD).forEach((task) => renderTask(task, taskListComponent));
 
-  // render load more button
-  loadMoreComponent.removeElement(); // TODO: remove listener instead of removeElement?
+  // re-render load more button
+  loadMoreComponent.removeElement();
   render(container.getElement(), loadMoreComponent);
 
   let renderedTasksCount = TASKS_PER_LOAD;

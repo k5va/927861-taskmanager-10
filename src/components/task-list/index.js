@@ -9,4 +9,8 @@ export default class Tasks extends AbstractComponent {
   getTemplate() {
     return template();
   }
+
+  resetList() {
+    this.getElement().innerHTML = ``;
+  }
 }
