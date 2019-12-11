@@ -1,4 +1,4 @@
-import {COLORS} from '../const.js';
+import {COLORS} from '../consts.js';
 import {getRandomArrayItem, getRandomDate, getRandomBoolean} from '../utils';
 
 const MAX_TAGS_COUNT = 3;

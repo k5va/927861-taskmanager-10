@@ -1,5 +1,5 @@
 import {isDateExpired, isDateToday, hasSomeBoolean} from "../utils";
-import {FILTERS} from "../const";
+import {FILTERS} from "../consts";
 
 const FilterTasksCounter = {
   all: (tasks) => tasks.length,
