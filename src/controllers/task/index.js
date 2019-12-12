@@ -97,4 +97,13 @@ export default class TaskController {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
+
+  /**
+   * Sets controller to default view
+   */
+  setDefaultView() {
+    if (this._mode !== TaskMode.DEFAULT) {
+      this._replaceEditToTask();
+    }
+  }
 }

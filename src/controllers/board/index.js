@@ -131,6 +131,10 @@ export default class BoardController {
     taskController.render(this._tasks[index]);
   }
 
+  /**
+   * Handles task controller's switch to edit mode
+   */
   _onViewChange() {
+    this._showedTaskControllers.forEach((taskController) => taskController.setDefaultView());
   }
 }
