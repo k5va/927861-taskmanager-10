@@ -113,7 +113,22 @@ export default class BoardController {
     this._renderLoadMore();
   }
 
-  _onDataChange() {
+  /**
+   * Task change handler
+   * @param {taskController} taskController - task controller, that correspondes to task
+   * @param {*} oldTask - old task object
+   * @param {*} newTask - new (changed) task object
+   */
+  _onDataChange(taskController, oldTask, newTask) {
+    const index = this._tasks.indexOf(oldTask);
+    if (index === -1) {
+      // task object is not found
+      return;
+    }
+
+    // update task and render
+    this._tasks[index] = newTask;
+    taskController.render(this._tasks[index]);
   }
 
   _onViewChange() {
