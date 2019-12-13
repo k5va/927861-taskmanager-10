@@ -23,4 +23,20 @@ export default class Task extends AbstractComponent {
   setEditHandler(handler) {
     this.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, handler);
   }
+
+  /**
+   * Sets task component archive click handler
+   * @param {Function} handler - handler
+   */
+  setArchiveHandler(handler) {
+    this.getElement().querySelector(`.card__btn--archive`).addEventListener(`click`, handler);
+  }
+
+  /**
+   * Sets task component favorites click handler
+   * @param {Function} handler - handler
+   */
+  setFavoritesHandler(handler) {
+    this.getElement().querySelector(`.card__btn--favorites`).addEventListener(`click`, handler);
+  }
 }

@@ -31,10 +31,17 @@ export default class AbstractComponent {
   }
 
   /**
-   * Removes component from the DOM
+   * Removes component's element from the DOM
    */
   removeElement() {
     this.getElement().remove();
+    this._element = null;
+  }
+
+  /**
+   * Clears reference to component's element
+   */
+  resetElement() {
     this._element = null;
   }
 }

@@ -7,23 +7,25 @@ import {COLORS} from "../../consts";
 /**
  * Creates Add/Edit task form template
  * @param {*} task - task object
+ * @param {Object} options - rendering options
  * @return {String} template
  */
-const template = (task) => {
-  const {description, tags, dueDate, color, repeatingDays} = task;
+const template = (task, options = {}) => {
+  const {description, tags, dueDate, color} = task;
+  const {isDateShowing, isRepeatingTask, activeRepeatingDays} = options;
+
 
   const deadlineClass = isDateExpired(dueDate) ? `card--deadline` : ``;
+  const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
+    (isRepeatingTask && !hasSomeBoolean(activeRepeatingDays));
 
-  const isDateShowing = !!dueDate;
-  const date = isDateShowing ? formatDate(dueDate) : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
+  const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
+  const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
 
-  const isRepeated = hasSomeBoolean(repeatingDays);
-  const repeatClass = isRepeated ? `card--repeat` : ``;
+  const repeatClass = isRepeatingTask ? `card--repeat` : ``;
 
   const hashtagsMarkup = createHashTags(tags);
-  const repeatingDaysMarkup = createRepeatingDays(repeatingDays);
-
+  const repeatingDaysMarkup = createRepeatingDays(activeRepeatingDays);
   const colorsMarkup = createColors(color, COLORS);
 
   return (
@@ -66,10 +68,10 @@ const template = (task) => {
                 </fieldset>` : ``}
 
                 <button class="card__repeat-toggle" type="button">
-                  repeat:<span class="card__repeat-status">${isRepeated ? `yes` : `no`}</span>
+                  repeat:<span class="card__repeat-status">${isRepeatingTask ? `yes` : `no`}</span>
                 </button>
 
-                ${isRepeated ? `
+                ${isRepeatingTask ? `
                 <fieldset class="card__repeat-days">
                   <div class="card__repeat-days-inner">${repeatingDaysMarkup}</div>
                 </fieldset>` : ``}
@@ -97,7 +99,7 @@ const template = (task) => {
           </div>
 
           <div class="card__status-btns">
-            <button class="card__save" type="submit">save</button>
+            <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>save</button>
             <button class="card__delete" type="button">delete</button>
           </div>
         </div>
