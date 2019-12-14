@@ -7,7 +7,7 @@ import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../../utils
  * @return {String} template
  */
 const template = (task) => {
-  const {description, tags, dueDate, color, repeatingDays} = task;
+  const {description, tags, dueDate, color, repeatingDays, isArchive, isFavorite} = task;
 
   const deadlineClass = isDateExpired(dueDate) ? `card--deadline` : ``;
 
@@ -27,12 +27,15 @@ const template = (task) => {
             <button type="button" class="card__btn card__btn--edit">
               edit
             </button>
-            <button type="button" class="card__btn card__btn--archive">
+            <button
+              type="button"
+              class="card__btn card__btn--archive ${isArchive ? `card__btn--disabled` : ``}"
+            >
               archive
             </button>
             <button
               type="button"
-              class="card__btn card__btn--favorites card__btn--disabled"
+              class="card__btn card__btn--favorites ${isFavorite ? `card__btn--disabled` : ``}"
             >
               favorites
             </button>
