@@ -11,7 +11,9 @@ export default class TaskForm extends AbstractSmartComponent {
     this._isRepeatingTask = hasSomeBoolean(task.repeatingDays);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
 
-    this._subscribeOnEvents();
+    this._submitHandler = null;
+
+    this._subscribeOnInternalEvents();
   }
 
   /**
@@ -27,7 +29,9 @@ export default class TaskForm extends AbstractSmartComponent {
   }
 
   recoveryListeners() {
-    this._subscribeOnEvents();
+    this._subscribeOnInternalEvents();
+
+    this._recoverSubmitHandler();
   }
 
   /**
@@ -35,13 +39,18 @@ export default class TaskForm extends AbstractSmartComponent {
    * @param {Function} handler - handler
    */
   setSubmitHandler(handler) {
-    this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
+    this._submitHandler = handler;
+    this._recoverSubmitHandler();
+  }
+
+  _recoverSubmitHandler() {
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._submitHandler);
   }
 
   /**
    * Addes component's interactive controls events handlers
    */
-  _subscribeOnEvents() {
+  _subscribeOnInternalEvents() {
     const element = this.getElement();
 
     element.querySelector(`.card__date-deadline-toggle`)
