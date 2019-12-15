@@ -56,6 +56,17 @@ export default class TaskForm extends AbstractSmartComponent {
     }
   }
 
+  /**
+   * Restes component's data and rerenders it
+   */
+  reset() {
+    this._isDateShowing = !!this._task.dueDate;
+    this._isRepeatingTask = hasSomeBoolean(this._task.repeatingDays);
+    this._activeRepeatingDays = Object.assign({}, this._task.repeatingDays);
+
+    this.rerender();
+  }
+
   recoveryListeners() {
     this._subscribeOnInternalEvents();
 
