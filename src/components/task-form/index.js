@@ -1,6 +1,7 @@
 import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
 import {hasSomeBoolean} from "../../utils";
+import flatpickr from "flatpickr";
 
 export default class TaskForm extends AbstractSmartComponent {
   constructor(task) {
@@ -12,7 +13,9 @@ export default class TaskForm extends AbstractSmartComponent {
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
 
     this._submitHandler = null;
+    this._flatpickr = null;
 
+    this._applyFlatpickr();
     this._subscribeOnInternalEvents();
   }
 
@@ -26,6 +29,31 @@ export default class TaskForm extends AbstractSmartComponent {
       isRepeatingTask: this._isRepeatingTask,
       activeRepeatingDays: this._activeRepeatingDays,
     });
+  }
+
+  rerender() {
+    super.rerender();
+    this._applyFlatpickr();
+  }
+
+  /**
+   * Creates flatpickr and initializes it with due date
+   */
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      // remove flatpickr's DOM elements
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector(`.card__date`);
+      this._flatpickr = flatpickr(dateElement, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._task.dueDate,
+      });
+    }
   }
 
   recoveryListeners() {
