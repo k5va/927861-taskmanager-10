@@ -60,7 +60,7 @@ const template = (task, options = {}) => {
                     <input
                       class="card__date"
                       type="text"
-                      placeholder="23 September"
+                      placeholder=""
                       name="date"
                       value="${date} ${time}"
                     />

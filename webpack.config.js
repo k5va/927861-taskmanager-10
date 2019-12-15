@@ -15,5 +15,13 @@ module.exports = {
     publicPath: `http://localhost:8080/`,
     compress: true,
     watchContentBase: true
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
   }
 };

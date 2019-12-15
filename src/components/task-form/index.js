@@ -1,6 +1,7 @@
 import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
 import {hasSomeBoolean} from "../../utils";
+import flatpickr from "flatpickr";
 
 export default class TaskForm extends AbstractSmartComponent {
   constructor(task) {
@@ -11,7 +12,11 @@ export default class TaskForm extends AbstractSmartComponent {
     this._isRepeatingTask = hasSomeBoolean(task.repeatingDays);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
 
-    this._subscribeOnEvents();
+    this._submitHandler = null;
+    this._flatpickr = null;
+
+    this._applyFlatpickr();
+    this._subscribeOnInternalEvents();
   }
 
   /**
@@ -26,8 +31,46 @@ export default class TaskForm extends AbstractSmartComponent {
     });
   }
 
+  rerender() {
+    super.rerender();
+    this._applyFlatpickr();
+  }
+
+  /**
+   * Creates flatpickr and initializes it with due date
+   */
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      // remove flatpickr's DOM elements
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector(`.card__date`);
+      this._flatpickr = flatpickr(dateElement, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._task.dueDate,
+      });
+    }
+  }
+
+  /**
+   * Restes component's data and rerenders it
+   */
+  reset() {
+    this._isDateShowing = !!this._task.dueDate;
+    this._isRepeatingTask = hasSomeBoolean(this._task.repeatingDays);
+    this._activeRepeatingDays = Object.assign({}, this._task.repeatingDays);
+
+    this.rerender();
+  }
+
   recoveryListeners() {
-    this._subscribeOnEvents();
+    this._subscribeOnInternalEvents();
+
+    this._recoverSubmitHandler();
   }
 
   /**
@@ -35,13 +78,18 @@ export default class TaskForm extends AbstractSmartComponent {
    * @param {Function} handler - handler
    */
   setSubmitHandler(handler) {
-    this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
+    this._submitHandler = handler;
+    this._recoverSubmitHandler();
+  }
+
+  _recoverSubmitHandler() {
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._submitHandler);
   }
 
   /**
    * Addes component's interactive controls events handlers
    */
-  _subscribeOnEvents() {
+  _subscribeOnInternalEvents() {
     const element = this.getElement();
 
     element.querySelector(`.card__date-deadline-toggle`)

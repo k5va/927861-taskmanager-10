@@ -67,7 +67,7 @@ export default class TaskController {
    * Changes task component to task form component (edit mode)
    */
   _replaceEditToTask() {
-    // TODO: this._taskEditComponent.reset();
+    this._taskEditComponent.reset();
 
     // switch to default mode
     replace(this._taskComponent, this._taskEditComponent);
