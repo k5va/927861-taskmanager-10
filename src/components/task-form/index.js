@@ -50,14 +50,15 @@ export default class TaskForm extends AbstractSmartComponent {
       const dateElement = this.getElement().querySelector(`.card__date`);
       this._flatpickr = flatpickr(dateElement, {
         altInput: true,
-        allowInput: true,
+        enableTime: true,
+        altFormat: `j F H:i K`,
         defaultDate: this._task.dueDate,
       });
     }
   }
 
   /**
-   * Restes component's data and rerenders it
+   * Resets component's data and rerenders it
    */
   reset() {
     this._isDateShowing = !!this._task.dueDate;
