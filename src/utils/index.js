@@ -1,4 +1,4 @@
-import {MONTH_NAMES} from "../consts";
+import moment from "moment";
 
 const DATE_MAX_RANGE = 7;
 
@@ -43,27 +43,14 @@ const getRandomBoolean = () => Math.random() > 0.5;
  * @param {Date} date - date object
  * @return {String} - formated date
  */
-const formatDate = (date) => `${date.getDate()} ${MONTH_NAMES[date.getMonth()]}`;
-
-/**
- *Formats given integer number by addig leading zero if it contains only one digit
- * @param {Number} num - integer to be formatted
- * @return {String} - formatted value
- */
-const formatNumber = (num) => num < 10 ? `0${num}` : `${num}`;
+const formatDate = (date) => moment(date).format(`DD MMMM`);
 
 /**
  * Formates time to string
  * @param {Date} date - date object
  * @return {String} - formated time
  */
-const formatTime = (date) => {
-  const timeZone = date.getHours() > 11 ? `PM` : `AM`;
-  const hours = formatNumber(date.getHours() % 12);
-  const minutes = formatNumber(date.getMinutes());
-
-  return `${hours}:${minutes} ${timeZone}`;
-};
+const formatTime = (date) => moment(date).format(`hh:mm A`);
 
 /**
  * Checks if date is expired
