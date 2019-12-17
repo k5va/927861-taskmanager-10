@@ -1,10 +1,10 @@
-import {isDateExpired, isDateToday, hasSomeBoolean} from "../utils";
+import {isDateExpired, hasSomeBoolean, isCurrentDate} from "../utils";
 import {FILTERS} from "../consts";
 
 const FilterTasksCounter = {
   all: (tasks) => tasks.length,
   overdue: (tasks) => tasks.filter(({dueDate}) => isDateExpired(dueDate)).length,
-  today: (tasks) => tasks.filter(({dueDate}) => isDateToday(dueDate)).length,
+  today: (tasks) => tasks.filter(({dueDate}) => isCurrentDate(dueDate)).length,
   favorites: (tasks) => tasks.filter(({isFavorite}) => isFavorite).length,
   repeating: (tasks) => tasks.filter(({repeatingDays}) => hasSomeBoolean(repeatingDays)).length,
   tags: (tasks) => tasks.filter(({tags}) => tags.size > 0).length,
