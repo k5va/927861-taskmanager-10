@@ -1,1 +1,1 @@
-export {defaut as Tasks} from "./tasks";
+export {defaut as TasksModel} from "./tasks";
