@@ -105,13 +105,8 @@ export default class BoardController {
    * @param {String} sortType - sort type
    */
   _onSortTypeChange(sortType) {
-    this._taskListComponent.resetList();
-    this._loadMoreComponent.removeElement();
-    this._showingTasksCount = TASKS_PER_LOAD;
-
     this._tasksModel.setSortType(sortType);
-    this._showingTaskControllers = this._renderTasks(this._tasksModel.getTasks().slice(0, this._showingTasksCount));
-    this._renderLoadMore();
+    this._updateTasksList();
   }
 
   /**
@@ -121,7 +116,12 @@ export default class BoardController {
    * @param {*} newTask - new (changed) task object
    */
   _onDataChange(taskController, oldTask, newTask) {
-    if (this._tasksModel.updateTask(oldTask.id, newTask)) {
+    if (newTask === null) {
+      // remove task
+      this._tasksModel.removeTask(oldTask.id);
+      // render updated tasks list
+      this._updateTasksList();
+    } else if (this._tasksModel.updateTask(oldTask.id, newTask)) { //TODO: try catch?
       taskController.render(newTask);
     }
   }
@@ -137,6 +137,13 @@ export default class BoardController {
    * Handles filter change
    */
   _onFilterChange() {
+    this._updateTasksList();
+  }
+
+  /**
+   * Rerenders tasks list
+   */
+  _updateTasksList() {
     this._taskListComponent.resetList();
     this._loadMoreComponent.removeElement();
     this._showingTasksCount = TASKS_PER_LOAD;
