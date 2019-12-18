@@ -48,13 +48,30 @@ export default class Tasks {
    * @return {Boolean} - true if model is successfully updated
    */
   updateTask(id, task) {
-    const index = this._tasks.findIndex((it) => it.id === id);
-
+    const index = this._findTaskById(id);
     if (index === -1) {
       return false;
     }
     // create new copy of tasks array with updated task. Can be used later for undo operations
     this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(index + 1));
+    // notify data change handlers
+    this._dataChangeHandlers.forEach((handler) => handler());
+
+    return true;
+  }
+
+  /**
+   * Removes task with given id from the model
+   * @param {String} id - task id
+   * @return {Boolean} - true if task is successfully remove
+   */
+  removeTask(id) {
+    const index = this._findTaskById(id);
+    if (index === -1) {
+      return false;
+    }
+    // create new copy of tasks array without removed task. Can be used later for undo operations
+    this._tasks = [].concat(this._tasks.slice(0, index), this._tasks.slice(index + 1));
     // notify data change handlers
     this._dataChangeHandlers.forEach((handler) => handler());
 
@@ -93,5 +110,14 @@ export default class Tasks {
    */
   setDataChangeHandler(handler) {
     this._dataChangeHandlers.push(handler);
+  }
+
+  /**
+   * Returns tasks index by given task id
+   * @param {String} id - tasks id
+   * @return {Number} - task'is index or -1
+   */
+  _findTaskById(id) {
+    return this._tasks.findIndex((it) => it.id === id);
   }
 }
