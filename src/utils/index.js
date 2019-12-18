@@ -10,4 +10,5 @@ export {hasSomeBoolean} from "./has-some-boolean";
 export {createElement} from "./create-element";
 export {render, RenderPosition} from "./render";
 export {replace} from "./replace";
+export {FilterTasks} from "./filter-tasks";
 
