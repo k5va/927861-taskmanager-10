@@ -27,7 +27,7 @@ export default class FilterController {
    */
   render() {
     const oldFilterComponent = this._filterComponent;
-    this._filterComponent = new FilterComponent(generateFilters(this._tasksModel.getTasks(), this._currentFilter));
+    this._filterComponent = new FilterComponent(generateFilters(this._tasksModel.getTasksAll(), this._currentFilter));
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
 
     if (oldFilterComponent) {
