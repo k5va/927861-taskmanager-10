@@ -1,8 +1,7 @@
-import {MenuComponent, FilterComponent, BoardComponent} from "./components";
+import {MenuComponent, BoardComponent} from "./components";
 import {generateTasks} from "./mock/task";
-import {generateFilters} from "./mock/filter";
 import {render} from "./utils";
-import BoardController from "./controllers/board";
+import {BoardController, FilterController} from "./controllers";
 import {TasksModel} from "./models";
 
 const TASK_COUNT = 22;
@@ -15,8 +14,9 @@ tasksModel.setTasks(tasks);
 
 // render site menu
 render(controlElement, new MenuComponent());
-// render filter
-render(mainElement, new FilterComponent(generateFilters(tasksModel.getTasks())));
+// create filter controller and render filter
+const filterController = new FilterController(mainElement, tasksModel);
+filterController.render();
 // render board
 const boardComponent = new BoardComponent();
 render(mainElement, boardComponent);
