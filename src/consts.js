@@ -1,6 +1,14 @@
 export const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
 
-export const FILTERS = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
+export const Filters = {
+  ALL: `all`,
+  ARCHIVE: `archive`,
+  FAVORITES: `favorites`,
+  OVERDUE: `overdue`,
+  REPEATING: `repeating`,
+  TAGS: `tags`,
+  TODAY: `today`,
+};
 
 export const TASKS_PER_LOAD = 8;
 
