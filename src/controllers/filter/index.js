@@ -17,6 +17,9 @@ export default class FilterController {
     this._filterComponent = null;
 
     this._onFilterChange = this._onFilterChange.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
+
+    this._tasksModel.setDataChangeHandler(this._onDataChange);
   }
 
   /**
@@ -42,5 +45,12 @@ export default class FilterController {
     // pass new filter to model
     this._tasksModel.setFilter(newFilter);
     this._currentFilter = newFilter;
+  }
+
+  /**
+   * Tasks model data change handler
+   */
+  _onDataChange() {
+    this.render();
   }
 }
