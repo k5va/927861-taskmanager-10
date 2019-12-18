@@ -13,6 +13,7 @@ export default class TaskForm extends AbstractSmartComponent {
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
 
     this._submitHandler = null;
+    this._deleteHandler = null;
     this._flatpickr = null;
 
     this._applyFlatpickr();
@@ -68,10 +69,11 @@ export default class TaskForm extends AbstractSmartComponent {
     this.rerender();
   }
 
-  recoveryListeners() {
+  recoverListeners() {
     this._subscribeOnInternalEvents();
 
     this._recoverSubmitHandler();
+    this._recoverDeleteHandler();
   }
 
   /**
@@ -85,6 +87,19 @@ export default class TaskForm extends AbstractSmartComponent {
 
   _recoverSubmitHandler() {
     this.getElement().querySelector(`form`).addEventListener(`submit`, this._submitHandler);
+  }
+
+  /**
+   * Sets task form component's delete handler
+   * @param {Function} handler - handler
+   */
+  setDeleteHandler(handler) {
+    this._deleteHandler = handler;
+    this._recoverDeleteHandler();
+  }
+
+  _recoverDeleteHandler() {
+    this.getElement().querySelector(`.card__delete`).addEventListener(`click`, this._deleteHandler);
   }
 
   /**
