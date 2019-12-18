@@ -26,8 +26,10 @@ export default class BoardController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._tasksModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   /**
@@ -130,5 +132,18 @@ export default class BoardController {
    */
   _onViewChange() {
     this._showingTaskControllers.forEach((taskController) => taskController.setDefaultView());
+  }
+
+  /**
+   * Handles filter change
+   */
+  _onFilterChange() { // TODO: refactore
+    this._taskListComponent.resetList();
+    this._loadMoreComponent.removeElement();
+    this._showingTasksCount = TASKS_PER_LOAD;
+
+    this._sortedTasks = this._tasksModel.getTasks();
+    this._showingTaskControllers = this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount));
+    this._renderLoadMore();
   }
 }
