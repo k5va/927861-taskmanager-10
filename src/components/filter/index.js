@@ -15,4 +15,22 @@ export default class Filter extends AbstractComponent {
   getTemplate() {
     return template(this._filters);
   }
+
+  /**
+   * Sets filter change handler
+   * @param {Function} handler - handler
+   */
+  setFilterChangeHandler(handler) {
+    this
+      .getElement()
+      .addEventListener(`change`, (evt) => {
+        evt.preventDefault();
+
+        if (!evt.target.classList.contains(`filter__input`)) {
+          return;
+        }
+
+        handler(evt.target.value);
+      });
+  }
 }
