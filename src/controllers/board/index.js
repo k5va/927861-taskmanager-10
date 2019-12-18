@@ -8,13 +8,14 @@ export default class BoardController {
   /**
    * Creates board controller instance
    * @param {Component} container - container component
+   * @param {TasksModel} tasksModel - tasks model
    */
-  constructor(container) {
+  constructor(container, tasksModel) {
     this._container = container;
 
-    this._tasks = [];
-    this._sortedTasks = [];
-    this._showedTaskControllers = [];
+    this._tasksModel = tasksModel;
+    this._sortedTasks = []; // TODO: refactor to model
+    this._showingTaskControllers = [];
     this._showingTasksCount = TASKS_PER_LOAD;
 
     this._taskListComponent = new TaskListComponent();
@@ -30,13 +31,12 @@ export default class BoardController {
   }
 
   /**
-   * Renders given tasks
-   * @param {Array<*>} tasks - array of tasks
+   * Renders tasks
    */
-  render(tasks) {
+  render() {
 
-    this._tasks = tasks;
-    this._sortedTasks = [...tasks];
+    const tasks = this._tasksModel.getTasks();
+    this._sortedTasks = [...tasks]; // TODO: !
 
     // check if there are tasks to render
     const isAllTasksArchived = tasks.every((task) => task.isArchive);
@@ -50,7 +50,7 @@ export default class BoardController {
 
     // render tasks
     render(this._container.getElement(), this._taskListComponent);
-    this._showedTaskControllers = this._showedTaskControllers.concat(
+    this._showingTaskControllers = this._showingTaskControllers.concat(
         this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount))
     );
 
@@ -71,7 +71,7 @@ export default class BoardController {
     render(this._container.getElement(), this._loadMoreComponent);
     this._loadMoreComponent.setClickHandler(() => {
       // render new portion of tasks
-      this._showedTaskControllers = this._showedTaskControllers.concat(
+      this._showingTaskControllers = this._showingTaskControllers.concat(
           this._renderTasks(this._sortedTasks.slice(this._showingTasksCount, this._showingTasksCount + TASKS_PER_LOAD))
       );
       // scroll to make load more button visible on page
@@ -108,8 +108,8 @@ export default class BoardController {
     this._loadMoreComponent.removeElement();
     this._showingTasksCount = TASKS_PER_LOAD;
 
-    this._sortedTasks = sortTasks(this._tasks, sortType);
-    this._showedTaskControllers = this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount));
+    this._sortedTasks = sortTasks(this._tasksModel.getTasks(), sortType);
+    this._showingTaskControllers = this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount));
     this._renderLoadMore();
   }
 
@@ -120,21 +120,15 @@ export default class BoardController {
    * @param {*} newTask - new (changed) task object
    */
   _onDataChange(taskController, oldTask, newTask) {
-    const index = this._tasks.indexOf(oldTask);
-    if (index === -1) {
-      // task object is not found
-      return;
+    if (this._tasksModel.updateTask(oldTask.id, newTask)) {
+      taskController.render(newTask);
     }
-
-    // update task and render
-    this._tasks[index] = newTask;
-    taskController.render(this._tasks[index]);
   }
 
   /**
    * Handles task controller's switch to edit mode
    */
   _onViewChange() {
-    this._showedTaskControllers.forEach((taskController) => taskController.setDefaultView());
+    this._showingTaskControllers.forEach((taskController) => taskController.setDefaultView());
   }
 }

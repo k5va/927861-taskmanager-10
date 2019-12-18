@@ -21,5 +21,5 @@ render(mainElement, new FilterComponent(generateFilters(tasksModel.getTasks())))
 const boardComponent = new BoardComponent();
 render(mainElement, boardComponent);
 // create board controller and render tasks
-const boardController = new BoardController(boardComponent);
-boardController.render(tasks);
+const boardController = new BoardController(boardComponent, tasksModel);
+boardController.render();
