@@ -12,6 +12,7 @@ export default class Tasks {
     this._filter = Filters.ALL;
     this._sortType = SortType.DEFAULT;
     this._filterChangeHandlers = [];
+    this._dataChangeHandlers = [];
   }
 
   /**
@@ -54,6 +55,8 @@ export default class Tasks {
     }
     // create new copy of tasks array with updated task. Can be used later for undo operations
     this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(index + 1));
+    // notify data change handlers
+    this._dataChangeHandlers.forEach((handler) => handler());
 
     return true;
   }
@@ -82,5 +85,13 @@ export default class Tasks {
    */
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
+  }
+
+  /**
+   * Adds model's data change handler
+   * @param {Function} handler - handler
+   */
+  setDataChangeHandler(handler) {
+    this._dataChangeHandlers.push(handler);
   }
 }
