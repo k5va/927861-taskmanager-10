@@ -1,9 +1,29 @@
 import {TaskComponent, TaskFormComponent} from "../../components";
 import {render, replace} from "../../utils";
+import {Color} from "../../consts";
 
 const TaskMode = {
   DEFAULT: `default`,
   EDIT: `edit`,
+  ADD: `add`
+};
+
+export const EmptyTask = {
+  description: ``,
+  dueDate: null,
+  repeatingDays: {
+    'mo': false,
+    'tu': false,
+    'we': false,
+    'th': false,
+    'fr': false,
+    'sa': false,
+    'su': false,
+  },
+  tags: [],
+  color: Color.BLACK,
+  isFavorite: false,
+  isArchive: false,
 };
 
 export default class TaskController {
@@ -53,6 +73,11 @@ export default class TaskController {
     this._taskEditComponent.setSubmitHandler(() => {
       this._replaceEditToTask();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
+    });
+
+    this._taskEditComponent.setDeleteHandler(() => {
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      this._onDataChange(this, task, null);
     });
 
     if (oldTaskEditComponent && oldTaskComponent) {
