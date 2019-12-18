@@ -1,7 +1,6 @@
 import {SortComponent, TaskListComponent, NoTasksComponent, LoadMoreComponent} from "../../components";
 import {TaskController} from "../../controllers";
 import {render} from "../../utils";
-import {sortTasks} from "./sort-tasks";
 import {TASKS_PER_LOAD} from "../../consts";
 
 export default class BoardController {
@@ -14,7 +13,6 @@ export default class BoardController {
     this._container = container;
 
     this._tasksModel = tasksModel;
-    this._sortedTasks = []; // TODO: refactor to model
     this._showingTaskControllers = [];
     this._showingTasksCount = TASKS_PER_LOAD;
 
@@ -38,7 +36,6 @@ export default class BoardController {
   render() {
 
     const tasks = this._tasksModel.getTasks();
-    this._sortedTasks = [...tasks]; // TODO: !
 
     // check if there are tasks to render
     const isAllTasksArchived = tasks.every((task) => task.isArchive);
@@ -53,7 +50,7 @@ export default class BoardController {
     // render tasks
     render(this._container.getElement(), this._taskListComponent);
     this._showingTaskControllers = this._showingTaskControllers.concat(
-        this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount))
+        this._renderTasks(this._tasksModel.getTasks().slice(0, this._showingTasksCount))
     );
 
     // render load more button
@@ -64,7 +61,7 @@ export default class BoardController {
    * Renders load more button
    */
   _renderLoadMore() {
-    if (this._showingTasksCount >= this._sortedTasks.length) {
+    if (this._showingTasksCount >= this._tasksModel.getTasks().length) {
       // no more tasks to load
       this._loadMoreComponent.removeElement();
       return;
@@ -74,13 +71,15 @@ export default class BoardController {
     this._loadMoreComponent.setClickHandler(() => {
       // render new portion of tasks
       this._showingTaskControllers = this._showingTaskControllers.concat(
-          this._renderTasks(this._sortedTasks.slice(this._showingTasksCount, this._showingTasksCount + TASKS_PER_LOAD))
+          this._renderTasks(
+              this._tasksModel.getTasks().slice(this._showingTasksCount, this._showingTasksCount + TASKS_PER_LOAD)
+          )
       );
       // scroll to make load more button visible on page
       this._loadMoreComponent.getElement().scrollIntoView(); // TODO: move to component's class
       // update rendered tasks counter and check if there are more tasks to load
       this._showingTasksCount += TASKS_PER_LOAD;
-      if (this._showingTasksCount >= this._sortedTasks.length) {
+      if (this._showingTasksCount >= this._tasksModel.getTasks().length) {
         // no more tasks to load
         this._loadMoreComponent.removeElement();
       }
@@ -110,8 +109,8 @@ export default class BoardController {
     this._loadMoreComponent.removeElement();
     this._showingTasksCount = TASKS_PER_LOAD;
 
-    this._sortedTasks = sortTasks(this._tasksModel.getTasks(), sortType);
-    this._showingTaskControllers = this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount));
+    this._tasksModel.setSortType(sortType);
+    this._showingTaskControllers = this._renderTasks(this._tasksModel.getTasks().slice(0, this._showingTasksCount));
     this._renderLoadMore();
   }
 
@@ -137,13 +136,12 @@ export default class BoardController {
   /**
    * Handles filter change
    */
-  _onFilterChange() { // TODO: refactore
+  _onFilterChange() {
     this._taskListComponent.resetList();
     this._loadMoreComponent.removeElement();
     this._showingTasksCount = TASKS_PER_LOAD;
 
-    this._sortedTasks = this._tasksModel.getTasks();
-    this._showingTaskControllers = this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount));
+    this._showingTaskControllers = this._renderTasks(this._tasksModel.getTasks().slice(0, this._showingTasksCount));
     this._renderLoadMore();
   }
 }

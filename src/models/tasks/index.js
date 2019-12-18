@@ -1,5 +1,7 @@
-import {Filters} from "../../consts";
+import {Filters, SortType} from "../../consts";
 import {FilterTasks} from "../../utils";
+
+import {sortTasks} from "./sort-tasks";
 
 export default class Tasks {
   /**
@@ -8,15 +10,16 @@ export default class Tasks {
   constructor() {
     this._tasks = [];
     this._filter = Filters.ALL;
+    this._sortType = SortType.DEFAULT;
     this._filterChangeHandlers = [];
   }
 
   /**
-   * Returns model's tasks
+   * Returns model's tasks filtered and sorted
    * @return {Array} - array of tasks
    */
   getTasks() {
-    return FilterTasks[this._filter](this._tasks);
+    return sortTasks(FilterTasks[this._filter](this._tasks), this._sortType);
   }
 
   /**
@@ -54,6 +57,7 @@ export default class Tasks {
 
     return true;
   }
+
   /**
    * Sets filter to be applied when getTasks is called
    * @param {String} filter - filter
@@ -62,6 +66,14 @@ export default class Tasks {
     this._filter = filter;
     // call registered filter change handlers
     this._filterChangeHandlers.forEach((handler) => handler());
+  }
+
+  /**
+   * Sets sort type to be applied when getTasks is called
+   * @param {String} sortType - sort type
+   */
+  setSortType(sortType) {
+    this._sortType = sortType;
   }
 
   /**
