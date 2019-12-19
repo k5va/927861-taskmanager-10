@@ -75,7 +75,8 @@ export default class TaskController {
 
     this._taskEditComponent.setSubmitHandler(() => {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
-      this._onDataChange(this, null, this._taskEditComponent.getData());
+      this._onDataChange(this, this._mode === RenderMode.ADD ? null : task, this._taskEditComponent.getData());
+      this._replaceEditToTask();
     });
 
     this._taskEditComponent.setDeleteHandler(() => {
