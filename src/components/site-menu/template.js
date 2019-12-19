@@ -9,7 +9,7 @@ const template = () => {
         type="radio"
         name="control"
         id="control__new-task"
-        class="control__input visually-hidden"
+        class="control__input control__input__new-task visually-hidden"
       />
       <label for="control__new-task" class="control__label control__label--new-task"
         >+ ADD NEW TASK</label
