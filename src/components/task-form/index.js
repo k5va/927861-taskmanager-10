@@ -105,7 +105,10 @@ export default class TaskForm extends AbstractSmartComponent {
   }
 
   _recoverSubmitHandler() {
-    this.getElement().querySelector(`form`).addEventListener(`submit`, this._submitHandler);
+    this.getElement().querySelector(`form`).addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      this._submitHandler();
+    });
   }
 
   /**
