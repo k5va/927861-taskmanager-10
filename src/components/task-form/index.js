@@ -21,6 +21,8 @@ export default class TaskForm extends AbstractSmartComponent {
 
     this._applyFlatpickr();
     this._subscribeOnInternalEvents();
+
+    this._toggleSaveButton(this._currentDescription !== ``);
   }
 
   /**
@@ -157,9 +159,16 @@ export default class TaskForm extends AbstractSmartComponent {
     element.querySelector(`.card__text`)
       .addEventListener(`input`, (evt) => {
         this._currentDescription = evt.target.value;
-
-        const saveButton = this.getElement().querySelector(`.card__save`);
-        saveButton.disabled = !isDescriptionValid(this._currentDescription);
+        this._toggleSaveButton(isDescriptionValid(this._currentDescription));
       });
+  }
+
+  /**
+   * Enables or disables save button
+   * @param {Boolean} isEnabled - if true enables save button. False - disables
+   */
+  _toggleSaveButton(isEnabled = true) {
+    const saveButton = this.getElement().querySelector(`.card__save`);
+    saveButton.disabled = !isEnabled;
   }
 }
