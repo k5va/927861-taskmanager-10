@@ -11,9 +11,10 @@ import {Color} from "../../consts";
  * @return {String} template
  */
 const template = (task, options = {}) => {
-  const {description, tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, activeRepeatingDays} = options;
+  const {tags, dueDate, color} = task;
+  const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription} = options;
 
+  const description = currentDescription; // TODO: needs encoding
 
   const deadlineClass = isDateExpired(dueDate) ? `card--deadline` : ``;
   const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||

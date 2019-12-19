@@ -2,6 +2,7 @@ import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
 import {hasSomeBoolean} from "../../utils";
 import flatpickr from "flatpickr";
+import {parseFormData} from "./parse-form-data";
 
 export default class TaskForm extends AbstractSmartComponent {
   constructor(task) {
@@ -11,6 +12,7 @@ export default class TaskForm extends AbstractSmartComponent {
     this._isDateShowing = !!task.dueDate;
     this._isRepeatingTask = hasSomeBoolean(task.repeatingDays);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
+    this._currentDescription = task.description;
 
     this._submitHandler = null;
     this._deleteHandler = null;
@@ -29,9 +31,13 @@ export default class TaskForm extends AbstractSmartComponent {
       isDateShowing: this._isDateShowing,
       isRepeatingTask: this._isRepeatingTask,
       activeRepeatingDays: this._activeRepeatingDays,
+      currentDescription: this._currentDescription
     });
   }
 
+  /**
+   * Rerenders component
+   */
   rerender() {
     super.rerender();
     this._applyFlatpickr();
@@ -65,10 +71,23 @@ export default class TaskForm extends AbstractSmartComponent {
     this._isDateShowing = !!this._task.dueDate;
     this._isRepeatingTask = hasSomeBoolean(this._task.repeatingDays);
     this._activeRepeatingDays = Object.assign({}, this._task.repeatingDays);
+    this._currentDescription = this._task.description;
 
     this.rerender();
   }
 
+  /**
+   * Returns task object created from task form's inputs.
+   * @return {*} - task object
+   */
+  getData() {
+    const form = this.getElement().querySelector(`.card__form`);
+    return parseFormData(new FormData(form));
+  }
+
+  /**
+   * Restores component's listeners
+   */
   recoverListeners() {
     this._subscribeOnInternalEvents();
 
@@ -130,5 +149,14 @@ export default class TaskForm extends AbstractSmartComponent {
         this.rerender();
       });
     }
+
+    element.querySelector(`.card__text`)
+      .addEventListener(`input`, (evt) => {
+        this._currentDescription = evt.target.value;
+
+        // const saveButton = this.getElement().querySelector(`.card__save`);
+        // saveButton.disabled = !isAllowableDescriptionLength(this._currentDescription);
+        // TODO: check description length
+      });
   }
 }
