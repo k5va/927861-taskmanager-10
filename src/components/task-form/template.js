@@ -1,7 +1,7 @@
 import {createHashTags} from "./create-hashtags";
 import {createRepeatingDays} from "./create-repeating-days";
 import {createColors} from "./create-colors";
-import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../../utils";
+import {formatDate, formatTime, isDateExpired, hasSomeBoolean, encode} from "../../utils";
 import {Color} from "../../consts";
 
 /**
@@ -14,7 +14,7 @@ const template = (task, options = {}) => {
   const {tags, dueDate, color} = task;
   const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription} = options;
 
-  const description = currentDescription; // TODO: needs encoding
+  const description = encode(currentDescription);
 
   const deadlineClass = isDateExpired(dueDate) ? `card--deadline` : ``;
   const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
