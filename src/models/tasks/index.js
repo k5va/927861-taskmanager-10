@@ -41,6 +41,17 @@ export default class Tasks {
   }
 
   /**
+   * Add new task in model
+   * @param {*} task - task object
+   */
+  addTask(task) {
+    // create new copy of tasks array with new task added. Can be used later for undo operations
+    this._tasks = [task, ...this._tasks];
+    // notify data change handlers
+    this._dataChangeHandlers.forEach((handler) => handler());
+  }
+
+  /**
    * Updates task in model
    *
    * @param {String} id - task id
@@ -53,7 +64,7 @@ export default class Tasks {
       return false;
     }
     // create new copy of tasks array with updated task. Can be used later for undo operations
-    this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(index + 1));
+    this._tasks = [...this._tasks.slice(0, index), task, ...this._tasks.slice(index + 1)];
     // notify data change handlers
     this._dataChangeHandlers.forEach((handler) => handler());
 
@@ -71,7 +82,7 @@ export default class Tasks {
       return false;
     }
     // create new copy of tasks array without removed task. Can be used later for undo operations
-    this._tasks = [].concat(this._tasks.slice(0, index), this._tasks.slice(index + 1));
+    this._tasks = [...this._tasks.slice(0, index), ...this._tasks.slice(index + 1)];
     // notify data change handlers
     this._dataChangeHandlers.forEach((handler) => handler());
 
