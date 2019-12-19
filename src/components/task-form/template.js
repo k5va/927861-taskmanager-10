@@ -45,6 +45,8 @@ const template = (task, options = {}) => {
                 class="card__text"
                 placeholder="Start typing your text here..."
                 name="text"
+                minlength="1"
+                maxlength="140"
               >${description}</textarea>
             </label>
           </div>

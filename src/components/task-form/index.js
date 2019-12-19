@@ -3,6 +3,7 @@ import {template} from "./template";
 import {hasSomeBoolean} from "../../utils";
 import flatpickr from "flatpickr";
 import {parseFormData} from "./parse-form-data";
+import {isDescriptionValid} from "./is-description-valid";
 
 export default class TaskForm extends AbstractSmartComponent {
   constructor(task) {
@@ -157,9 +158,8 @@ export default class TaskForm extends AbstractSmartComponent {
       .addEventListener(`input`, (evt) => {
         this._currentDescription = evt.target.value;
 
-        // const saveButton = this.getElement().querySelector(`.card__save`);
-        // saveButton.disabled = !isAllowableDescriptionLength(this._currentDescription);
-        // TODO: check description length
+        const saveButton = this.getElement().querySelector(`.card__save`);
+        saveButton.disabled = !isDescriptionValid(this._currentDescription);
       });
   }
 }
