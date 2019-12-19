@@ -13,7 +13,8 @@ const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
 
 // render site menu
-render(controlElement, new MenuComponent());
+const menuComponent = new MenuComponent();
+render(controlElement, menuComponent);
 // create filter controller and render filter
 const filterController = new FilterController(mainElement, tasksModel);
 filterController.render();
@@ -22,4 +23,7 @@ const boardComponent = new BoardComponent();
 render(mainElement, boardComponent);
 // create board controller and render tasks
 const boardController = new BoardController(boardComponent, tasksModel);
+menuComponent.setNewTaskHandler(() => {
+  boardController.addTask();
+});
 boardController.render();
