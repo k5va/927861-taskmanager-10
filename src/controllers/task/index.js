@@ -164,4 +164,12 @@ export default class TaskController {
   get mode() {
     return this._mode;
   }
+
+  /**
+   * Switches task controller to default mode and locks it's controls
+   */
+  lock() {
+    this.setDefaultView();
+    this._taskComponent.lock();
+  }
 }

@@ -41,8 +41,8 @@ export default class BoardController {
 
     this._addTaskController = new TaskController(this._taskListComponent, this._onDataChange, this._onViewChange);
     this._addTaskController.render(EmptyTask, RenderMode.ADD);
-    // reset other task controllers to default view
-    this._showingTaskControllers.forEach((taskController) => taskController.setDefaultView());
+    // reset other task controllers and lock them
+    this._showingTaskControllers.forEach((taskController) => taskController.lock());
   }
 
   /**

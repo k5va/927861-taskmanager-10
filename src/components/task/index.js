@@ -39,4 +39,13 @@ export default class Task extends AbstractComponent {
   setFavoritesHandler(handler) {
     this.getElement().querySelector(`.card__btn--favorites`).addEventListener(`click`, handler);
   }
+
+  /**
+   * Locks component's controls
+   */
+  lock() {
+    this.getElement().querySelector(`.card__btn--edit`).disabled = true;
+    this.getElement().querySelector(`.card__btn--archive`).disabled = true;
+    this.getElement().querySelector(`.card__btn--favorites`).disabled = true;
+  }
 }
