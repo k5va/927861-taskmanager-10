@@ -1,5 +1,5 @@
 import {createHashTags} from "./create-hashtags";
-import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../../utils";
+import {formatDate, formatTime, isDateExpired, hasSomeBoolean, encode} from "../../utils";
 
 /**
  * Creates task html template
@@ -7,7 +7,9 @@ import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../../utils
  * @return {String} template
  */
 const template = (task) => {
-  const {description, tags, dueDate, color, repeatingDays, isArchive, isFavorite} = task;
+  const {description: notEncodedDescription, tags, dueDate, color, repeatingDays, isArchive, isFavorite} = task;
+
+  const description = encode(notEncodedDescription);
 
   const deadlineClass = isDateExpired(dueDate) ? `card--deadline` : ``;
 
