@@ -23,3 +23,13 @@ export const SortType = {
   DATE_UP: `date-up`,
   DATE_DOWN: `date-down`
 };
+
+export const WeekDay = {
+  MO: `mo`,
+  TU: `tu`,
+  WE: `we`,
+  TH: `th`,
+  FR: `fr`,
+  SA: `sa`,
+  SU: `su`
+};
