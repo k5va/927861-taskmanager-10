@@ -1,5 +1,5 @@
 import {SortComponent, TaskListComponent, NoTasksComponent, LoadMoreComponent} from "../../components";
-import {TaskController} from "../../controllers";
+import {TaskController, RenderMode, EmptyTask} from "../../controllers";
 import {render} from "../../utils";
 import {TASKS_PER_LOAD} from "../../consts";
 
@@ -14,6 +14,7 @@ export default class BoardController {
 
     this._tasksModel = tasksModel;
     this._showingTaskControllers = [];
+    this._addTaskController = null;
     this._showingTasksCount = TASKS_PER_LOAD;
 
     this._taskListComponent = new TaskListComponent();
@@ -28,6 +29,14 @@ export default class BoardController {
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._tasksModel.setFilterChangeHandler(this._onFilterChange);
+  }
+
+  /**
+   * Adds new task
+   */
+  addTask() {
+    this._addTaskController = new TaskController(this._taskListComponent, this._onDataChange, this._onViewChange);
+    this._addTaskController.render(EmptyTask, RenderMode.ADD);
   }
 
   /**
@@ -116,13 +125,32 @@ export default class BoardController {
    * @param {*} newTask - new (changed) task object
    */
   _onDataChange(taskController, oldTask, newTask) {
-    if (newTask === null) {
-      // remove task
-      this._tasksModel.removeTask(oldTask.id);
+    if (newTask === null) { // remove task
+      if (taskController.mode === RenderMode.ADD) {
+        this._addTaskController.destroy();
+        this._addTaskController = null;
+      } else {
+        this._tasksModel.removeTask(oldTask.id);
+      }
       // render updated tasks list
       this._updateTasksList();
-    } else if (this._tasksModel.updateTask(oldTask.id, newTask)) { //TODO: try catch?
+      return;
+    }
+
+    if (oldTask === null) { // add new task
+      this._addTaskController.destroy();
+      this._addTaskController = null;
+
+      this._tasksModel.addTask(newTask);
+      // render updated tasks list
+      this._updateTasksList();
+      return;
+    }
+
+    if (oldTask && newTask) { // update task
+      this._tasksModel.updateTask(oldTask.id, newTask);
       taskController.render(newTask);
+      return;
     }
   }
 
