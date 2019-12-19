@@ -62,7 +62,7 @@ export default class TaskController {
 
     this._taskComponent.setEditHandler(() => {
       this._replaceTaskToEdit();
-      document.addEventListener(`keydown`, this._onEscKeyDown);
+
     });
 
     this._taskComponent.setArchiveHandler(() => {
@@ -74,7 +74,6 @@ export default class TaskController {
     });
 
     this._taskEditComponent.setSubmitHandler(() => {
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
       this._onDataChange(this, this._mode === RenderMode.ADD ? null : task, this._taskEditComponent.getData());
       this._replaceEditToTask();
     });
@@ -109,6 +108,7 @@ export default class TaskController {
 
     // switch to default mode
     replace(this._taskComponent, this._taskEditComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._mode = RenderMode.DEFAULT;
   }
 
@@ -120,6 +120,7 @@ export default class TaskController {
     this._onViewChange();
     // switch to edit mode
     replace(this._taskEditComponent, this._taskComponent);
+    document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = RenderMode.EDIT;
   }
 
@@ -132,11 +133,11 @@ export default class TaskController {
 
     if (isEscKey) {
       if (this._mode === RenderMode.ADD) {
+        document.removeEventListener(`keydown`, this._onEscKeyDown);
         this._onDataChange(this, EmptyTask, null);
+      } else {
+        this._replaceEditToTask();
       }
-
-      this._replaceEditToTask();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
 
