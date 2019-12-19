@@ -35,6 +35,10 @@ export default class BoardController {
    * Creates new task form and renders it
    */
   addTask() {
+    if (this._addTaskController) {
+      return;
+    }
+
     this._addTaskController = new TaskController(this._taskListComponent, this._onDataChange, this._onViewChange);
     this._addTaskController.render(EmptyTask, RenderMode.ADD);
     // reset other task controllers to default view
