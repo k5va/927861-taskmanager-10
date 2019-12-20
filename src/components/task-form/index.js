@@ -2,6 +2,8 @@ import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
 import {hasSomeBoolean} from "../../utils";
 import flatpickr from "flatpickr";
+import {parseFormData} from "./parse-form-data";
+import {isDescriptionValid} from "./is-description-valid";
 
 export default class TaskForm extends AbstractSmartComponent {
   constructor(task) {
@@ -11,12 +13,16 @@ export default class TaskForm extends AbstractSmartComponent {
     this._isDateShowing = !!task.dueDate;
     this._isRepeatingTask = hasSomeBoolean(task.repeatingDays);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
+    this._currentDescription = task.description;
 
     this._submitHandler = null;
+    this._deleteHandler = null;
     this._flatpickr = null;
 
     this._applyFlatpickr();
     this._subscribeOnInternalEvents();
+
+    this._toggleSaveButton(this._currentDescription !== ``);
   }
 
   /**
@@ -28,9 +34,13 @@ export default class TaskForm extends AbstractSmartComponent {
       isDateShowing: this._isDateShowing,
       isRepeatingTask: this._isRepeatingTask,
       activeRepeatingDays: this._activeRepeatingDays,
+      currentDescription: this._currentDescription
     });
   }
 
+  /**
+   * Rerenders component
+   */
   rerender() {
     super.rerender();
     this._applyFlatpickr();
@@ -64,14 +74,28 @@ export default class TaskForm extends AbstractSmartComponent {
     this._isDateShowing = !!this._task.dueDate;
     this._isRepeatingTask = hasSomeBoolean(this._task.repeatingDays);
     this._activeRepeatingDays = Object.assign({}, this._task.repeatingDays);
+    this._currentDescription = this._task.description;
 
     this.rerender();
   }
 
-  recoveryListeners() {
+  /**
+   * Returns task object created from task form's inputs.
+   * @return {*} - task object
+   */
+  getData() {
+    const form = this.getElement().querySelector(`.card__form`);
+    return parseFormData(new FormData(form));
+  }
+
+  /**
+   * Restores component's listeners
+   */
+  recoverListeners() {
     this._subscribeOnInternalEvents();
 
     this._recoverSubmitHandler();
+    this._recoverDeleteHandler();
   }
 
   /**
@@ -84,7 +108,23 @@ export default class TaskForm extends AbstractSmartComponent {
   }
 
   _recoverSubmitHandler() {
-    this.getElement().querySelector(`form`).addEventListener(`submit`, this._submitHandler);
+    this.getElement().querySelector(`form`).addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      this._submitHandler();
+    });
+  }
+
+  /**
+   * Sets task form component's delete handler
+   * @param {Function} handler - handler
+   */
+  setDeleteHandler(handler) {
+    this._deleteHandler = handler;
+    this._recoverDeleteHandler();
+  }
+
+  _recoverDeleteHandler() {
+    this.getElement().querySelector(`.card__delete`).addEventListener(`click`, this._deleteHandler);
   }
 
   /**
@@ -115,5 +155,20 @@ export default class TaskForm extends AbstractSmartComponent {
         this.rerender();
       });
     }
+
+    element.querySelector(`.card__text`)
+      .addEventListener(`input`, (evt) => {
+        this._currentDescription = evt.target.value;
+        this._toggleSaveButton(isDescriptionValid(this._currentDescription));
+      });
+  }
+
+  /**
+   * Enables or disables save button
+   * @param {Boolean} isEnabled - if true enables save button. False - disables
+   */
+  _toggleSaveButton(isEnabled = true) {
+    const saveButton = this.getElement().querySelector(`.card__save`);
+    saveButton.disabled = !isEnabled;
   }
 }

@@ -1,4 +1,4 @@
-import {COLORS} from '../consts.js';
+import {Color} from '../consts.js';
 import {getRandomArrayItem, getRandomDate, getRandomBoolean} from '../utils';
 
 const MAX_TAGS_COUNT = 3;
@@ -57,11 +57,12 @@ const generateTask = () => {
   const dueDate = getRandomBoolean() ? null : getRandomDate();
 
   return {
+    id: String(new Date() + Math.random()),
     description: getRandomArrayItem(DescriptionItems),
     dueDate,
     repeatingDays: dueDate ? DefaultRepeatingDays : generateRepeatingDays(),
     tags: generateTags(),
-    color: getRandomArrayItem(COLORS),
+    color: getRandomArrayItem(Object.values(Color)),
     isFavorite: getRandomBoolean(),
     isArchive: getRandomBoolean(),
   };

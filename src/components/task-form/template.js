@@ -1,8 +1,8 @@
 import {createHashTags} from "./create-hashtags";
 import {createRepeatingDays} from "./create-repeating-days";
 import {createColors} from "./create-colors";
-import {formatDate, formatTime, isDateExpired, hasSomeBoolean} from "../../utils";
-import {COLORS} from "../../consts";
+import {formatDate, formatTime, isDateExpired, hasSomeBoolean, encode} from "../../utils";
+import {Color} from "../../consts";
 
 /**
  * Creates Add/Edit task form template
@@ -11,9 +11,10 @@ import {COLORS} from "../../consts";
  * @return {String} template
  */
 const template = (task, options = {}) => {
-  const {description, tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, activeRepeatingDays} = options;
+  const {tags, dueDate, color} = task;
+  const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription} = options;
 
+  const description = encode(currentDescription);
 
   const deadlineClass = isDateExpired(dueDate) ? `card--deadline` : ``;
   const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
@@ -26,7 +27,7 @@ const template = (task, options = {}) => {
 
   const hashtagsMarkup = createHashTags(tags);
   const repeatingDaysMarkup = createRepeatingDays(activeRepeatingDays);
-  const colorsMarkup = createColors(color, COLORS);
+  const colorsMarkup = createColors(color, Object.values(Color));
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -44,6 +45,8 @@ const template = (task, options = {}) => {
                 class="card__text"
                 placeholder="Start typing your text here..."
                 name="text"
+                minlength="1"
+                maxlength="140"
               >${description}</textarea>
             </label>
           </div>

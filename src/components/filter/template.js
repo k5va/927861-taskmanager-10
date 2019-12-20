@@ -1,5 +1,3 @@
-const DEFAULT_SELECTED_FILTER = 0;
-
 /**
  * Creates filter html template
  * @param {Array<*>} filters - array of filters
@@ -7,10 +5,11 @@ const DEFAULT_SELECTED_FILTER = 0;
  */
 const template = (filters) => {
   const filtersMarkup = filters
-    .map(({name, count}, index) => (
+    .map(({name, count, selected}) => (
       `<input type="radio" id="filter__${name}"
-        class="filter__input visually-hidden" name="filter"
-        ${index === DEFAULT_SELECTED_FILTER ? `checked` : ``}
+        class="filter__input visually-hidden" name="filter" value="${name}"
+        ${selected ? `checked` : ``}
+        ${count === 0 ? `disabled` : ``}
       />
       <label for="filter__${name}" class="filter__label">
         ${name}<span class="filter__${name}-count"> ${count}</span>

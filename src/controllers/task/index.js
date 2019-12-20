@@ -1,9 +1,29 @@
 import {TaskComponent, TaskFormComponent} from "../../components";
-import {render, replace} from "../../utils";
+import {render, replace, RenderPosition} from "../../utils";
+import {Color} from "../../consts";
 
-const TaskMode = {
+export const RenderMode = {
   DEFAULT: `default`,
   EDIT: `edit`,
+  ADD: `add`
+};
+
+export const EmptyTask = {
+  description: ``,
+  dueDate: null,
+  repeatingDays: {
+    'mo': false,
+    'tu': false,
+    'we': false,
+    'th': false,
+    'fr': false,
+    'sa': false,
+    'su': false,
+  },
+  tags: [],
+  color: Color.BLACK,
+  isFavorite: false,
+  isArchive: false,
 };
 
 export default class TaskController {
@@ -18,7 +38,7 @@ export default class TaskController {
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
 
-    this._mode = TaskMode.DEFAULT;
+    this._mode = RenderMode.DEFAULT;
 
     this._taskComponent = null;
     this._taskEditComponent = null;
@@ -29,8 +49,11 @@ export default class TaskController {
   /**
    * Renders given task
    * @param {*} task - task object
+   * @param {String} mode - render mode
    */
-  render(task) {
+  render(task, mode = RenderMode.DEFAULT) {
+    this._mode = mode;
+
     const oldTaskComponent = this._taskComponent;
     const oldTaskEditComponent = this._taskEditComponent;
 
@@ -39,7 +62,7 @@ export default class TaskController {
 
     this._taskComponent.setEditHandler(() => {
       this._replaceTaskToEdit();
-      document.addEventListener(`keydown`, this._onEscKeyDown);
+
     });
 
     this._taskComponent.setArchiveHandler(() => {
@@ -51,15 +74,29 @@ export default class TaskController {
     });
 
     this._taskEditComponent.setSubmitHandler(() => {
+      this._onDataChange(this, this._mode === RenderMode.ADD ? null : task, this._taskEditComponent.getData());
       this._replaceEditToTask();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    if (oldTaskEditComponent && oldTaskComponent) {
-      replace(this._taskComponent, oldTaskComponent);
-      replace(this._taskEditComponent, oldTaskEditComponent);
-    } else {
-      render(this._container.getElement(), this._taskComponent);
+    this._taskEditComponent.setDeleteHandler(() => {
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      this._onDataChange(this, task, null);
+    });
+
+    switch (this._mode) {
+      case RenderMode.DEFAULT:
+      default:
+        if (oldTaskEditComponent && oldTaskComponent) {
+          replace(this._taskComponent, oldTaskComponent);
+          replace(this._taskEditComponent, oldTaskEditComponent);
+        } else {
+          render(this._container.getElement(), this._taskComponent);
+        }
+        break;
+      case RenderMode.ADD:
+        render(this._container.getElement(), this._taskEditComponent, RenderPosition.AFTER_BEGIN);
+        document.addEventListener(`keydown`, this._onEscKeyDown);
+        break;
     }
   }
 
@@ -71,7 +108,8 @@ export default class TaskController {
 
     // switch to default mode
     replace(this._taskComponent, this._taskEditComponent);
-    this._mode = TaskMode.DEFAULT;
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = RenderMode.DEFAULT;
   }
 
   /**
@@ -82,7 +120,8 @@ export default class TaskController {
     this._onViewChange();
     // switch to edit mode
     replace(this._taskEditComponent, this._taskComponent);
-    this._mode = TaskMode.EDIT;
+    document.addEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = RenderMode.EDIT;
   }
 
   /**
@@ -93,8 +132,12 @@ export default class TaskController {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      this._replaceEditToTask();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      if (this._mode === RenderMode.ADD) {
+        document.removeEventListener(`keydown`, this._onEscKeyDown);
+        this._onDataChange(this, EmptyTask, null);
+      } else {
+        this._replaceEditToTask();
+      }
     }
   }
 
@@ -102,8 +145,32 @@ export default class TaskController {
    * Sets controller to default view
    */
   setDefaultView() {
-    if (this._mode !== TaskMode.DEFAULT) {
+    if (this._mode !== RenderMode.DEFAULT) {
       this._replaceEditToTask();
     }
+  }
+
+  /**
+   * Destroys controller by removing it's elements and listeners from the DOM
+   */
+  destroy() {
+    this._taskComponent.removeElement();
+    this._taskEditComponent.removeElement();
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  /**
+   * Controller's render mode getter
+   */
+  get mode() {
+    return this._mode;
+  }
+
+  /**
+   * Switches task controller to default mode and locks it's controls
+   */
+  lock() {
+    this.setDefaultView();
+    this._taskComponent.lock();
   }
 }
