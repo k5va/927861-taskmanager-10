@@ -1,7 +1,7 @@
 import {render, replace} from "../../utils";
 import {FilterComponent} from "../../components";
 import {generateFilters} from "./generate-filter";
-import {Filters} from "../../consts";
+import {Filter} from "../../consts";
 
 export default class FilterController {
   /**
@@ -13,7 +13,7 @@ export default class FilterController {
     this._container = container;
     this._tasksModel = tasksModel;
 
-    this._currentFilter = Filters.ALL;
+    this._currentFilter = Filter.ALL;
     this._filterComponent = null;
 
     this._onFilterChange = this._onFilterChange.bind(this);

@@ -6,7 +6,7 @@ export const Color = {
   PINK: `pink`,
 };
 
-export const Filters = {
+export const Filter = {
   ALL: `all`,
   ARCHIVE: `archive`,
   FAVORITES: `favorites`,
