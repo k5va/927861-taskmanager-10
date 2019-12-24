@@ -2,6 +2,7 @@ import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
 import flatpickr from "flatpickr";
 import {renderDaysChart} from "./render-days-chart";
+import {renderTagsChart} from "./render-tags-chart";
 
 export default class Statistics extends AbstractSmartComponent {
 
@@ -54,7 +55,7 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._resetCharts();
     this._daysChart = renderDaysChart(daysCtx, this._tasks, this._dateFrom, this._dateTo);
-    // this._tagsChart = renderTagsChart(tagsCtx, this._tasks);
+    this._tagsChart = renderTagsChart(tagsCtx, this._tasks);
     // this._colorsChart = renderColorsChart(colorsCtx, this._tasks);
   }
 
