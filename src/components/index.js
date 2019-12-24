@@ -7,3 +7,4 @@ export {default as SortComponent} from "./sort";
 export {default as TaskFormComponent} from "./task-form";
 export {default as TaskComponent} from "./task";
 export {default as TaskListComponent} from "./task-list";
+export {default as StatisticsComponent} from "./statistics";
