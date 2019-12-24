@@ -33,3 +33,9 @@ export const WeekDay = {
   SA: `sa`,
   SU: `su`
 };
+
+export const MenuItem = {
+  NEW_TASK: `control__new-task`,
+  STATISTICS: `control__statistic`,
+  TASKS: `control__task`,
+};
