@@ -1,8 +1,9 @@
-import {MenuComponent, BoardComponent} from "./components";
+import {MenuComponent, BoardComponent, StatisticsComponent} from "./components";
 import {generateTasks} from "./mock/task";
 import {render} from "./utils";
 import {BoardController, FilterController} from "./controllers";
 import {TasksModel} from "./models";
+import {MenuItem} from "./consts";
 
 const TASK_COUNT = 22;
 
@@ -23,7 +24,27 @@ const boardComponent = new BoardComponent();
 render(mainElement, boardComponent);
 // create board controller and render tasks
 const boardController = new BoardController(boardComponent, tasksModel);
-menuComponent.setNewTaskHandler(() => {
-  boardController.addTask();
+// create statistics component and render
+const statisticsComponent = new StatisticsComponent();
+render(mainElement, statisticsComponent);
+statisticsComponent.hide();
+
+menuComponent.setSelectHandler((menuItem) => {
+  switch (menuItem) {
+    case MenuItem.NEW_TASK:
+      statisticsComponent.hide();
+      boardController.show();
+      boardController.addTask();
+      break;
+    case MenuItem.STATISTICS:
+      boardController.hide();
+      statisticsComponent.show();
+      break;
+    case MenuItem.TASKS:
+      statisticsComponent.hide();
+      boardController.show();
+      break;
+  }
 });
+
 boardController.render();
