@@ -12,4 +12,6 @@ export {render, RenderPosition} from "./render";
 export {replace} from "./replace";
 export {FilterTasks} from "./filter-tasks";
 export {encode} from "./encode";
+export {isSameDay} from "./same-day";
+
 
