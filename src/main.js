@@ -3,7 +3,7 @@ import {generateTasks} from "./mock/task";
 import {render} from "./utils";
 import {BoardController, FilterController} from "./controllers";
 import {TasksModel} from "./models";
-import {MenuItem} from "./consts";
+import {MenuItem, DEFAULT_STATISTICS_PERIOD} from "./consts";
 import moment from "moment";
 
 const TASK_COUNT = 22;
@@ -12,7 +12,7 @@ const mainElement = document.querySelector(`.main`);
 const controlElement = mainElement.querySelector(`.main__control`);
 const tasks = generateTasks(TASK_COUNT);
 const endDate = new Date();
-const startDate = moment().subtract(7, `d`).toDate();
+const startDate = moment().subtract(DEFAULT_STATISTICS_PERIOD, `d`).toDate();
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
 
