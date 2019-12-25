@@ -1,4 +1,4 @@
-import {Filters, SortType} from "../../consts";
+import {Filter, SortType} from "../../consts";
 import {FilterTasks} from "../../utils";
 
 import {sortTasks} from "./sort-tasks";
@@ -9,7 +9,7 @@ export default class Tasks {
    */
   constructor() {
     this._tasks = [];
-    this._filter = Filters.ALL;
+    this._filter = Filter.ALL;
     this._sortType = SortType.DEFAULT;
     this._filterChangeHandlers = [];
     this._dataChangeHandlers = [];

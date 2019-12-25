@@ -6,7 +6,7 @@ export const Color = {
   PINK: `pink`,
 };
 
-export const Filters = {
+export const Filter = {
   ALL: `all`,
   ARCHIVE: `archive`,
   FAVORITES: `favorites`,
@@ -33,3 +33,11 @@ export const WeekDay = {
   SA: `sa`,
   SU: `su`
 };
+
+export const MenuItem = {
+  NEW_TASK: `control__new-task`,
+  STATISTICS: `control__statistic`,
+  TASKS: `control__task`,
+};
+
+export const DEFAULT_STATISTICS_PERIOD = 7;

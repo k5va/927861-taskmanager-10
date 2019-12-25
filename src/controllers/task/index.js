@@ -1,6 +1,6 @@
 import {TaskComponent, TaskFormComponent} from "../../components";
 import {render, replace, RenderPosition} from "../../utils";
-import {Color} from "../../consts";
+import {Color, WeekDay} from "../../consts";
 
 export const RenderMode = {
   DEFAULT: `default`,
@@ -12,13 +12,13 @@ export const EmptyTask = {
   description: ``,
   dueDate: null,
   repeatingDays: {
-    'mo': false,
-    'tu': false,
-    'we': false,
-    'th': false,
-    'fr': false,
-    'sa': false,
-    'su': false,
+    [WeekDay.MO]: false,
+    [WeekDay.TU]: false,
+    [WeekDay.WE]: false,
+    [WeekDay.TH]: false,
+    [WeekDay.FR]: false,
+    [WeekDay.SA]: false,
+    [WeekDay.SU]: false
   },
   tags: [],
   color: Color.BLACK,

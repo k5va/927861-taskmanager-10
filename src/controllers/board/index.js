@@ -73,6 +73,20 @@ export default class BoardController {
   }
 
   /**
+   * Hides board
+   */
+  hide() {
+    this._container.hide();
+  }
+
+  /**
+   * Shows board
+   */
+  show() {
+    this._container.show();
+  }
+
+  /**
    * Renders load more button
    */
   _renderLoadMore() {

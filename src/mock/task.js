@@ -1,4 +1,4 @@
-import {Color} from '../consts.js';
+import {Color, WeekDay} from '../consts.js';
 import {getRandomArrayItem, getRandomDate, getRandomBoolean} from '../utils';
 
 const MAX_TAGS_COUNT = 3;
@@ -11,13 +11,13 @@ const DescriptionItems = [
 ];
 
 const DefaultRepeatingDays = {
-  'mo': false,
-  'tu': false,
-  'we': false,
-  'th': false,
-  'fr': false,
-  'sa': false,
-  'su': false,
+  [WeekDay.MO]: false,
+  [WeekDay.TU]: false,
+  [WeekDay.WE]: false,
+  [WeekDay.TH]: false,
+  [WeekDay.FR]: false,
+  [WeekDay.SA]: false,
+  [WeekDay.SU]: false
 };
 
 const Tags = [
