@@ -12,7 +12,7 @@ const mainElement = document.querySelector(`.main`);
 const controlElement = mainElement.querySelector(`.main__control`);
 const tasks = generateTasks(TASK_COUNT);
 const endDate = new Date();
-const startDate = moment().subtract(7, `d`);
+const startDate = moment().subtract(7, `d`).toDate();
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
 
