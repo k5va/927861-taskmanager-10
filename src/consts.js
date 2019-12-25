@@ -39,3 +39,5 @@ export const MenuItem = {
   STATISTICS: `control__statistic`,
   TASKS: `control__task`,
 };
+
+export const DEFAULT_STATISTICS_PERIOD = 7;
