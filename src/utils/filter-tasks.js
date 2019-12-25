@@ -2,7 +2,7 @@ import {isDateExpired, hasSomeBoolean, isCurrentDate} from "./index";
 import {Filter} from "../consts";
 
 export const FilterTasks = {
-  [Filter.ALL]: (tasks) => tasks,
+  [Filter.ALL]: (tasks) => tasks.filter(({isArchive}) => !isArchive),
   [Filter.OVERDUE]: (tasks) => tasks.filter(({dueDate}) => isDateExpired(dueDate)),
   [Filter.TODAY]: (tasks) => tasks.filter(({dueDate}) => isCurrentDate(dueDate)),
   [Filter.FAVORITES]: (tasks) => tasks.filter(({isFavorite}) => isFavorite),
