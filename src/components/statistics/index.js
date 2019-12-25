@@ -84,7 +84,8 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._flatpickr = flatpickr(element, {
       altInput: true,
-      allowInput: true,
+      allowInput: false,
+      altFormat: `j F`,
       defaultDate: [this._dateFrom, this._dateTo],
       mode: `range`,
       onChange: (dates) => {

@@ -1,8 +1,27 @@
+import moment from "moment";
+
+const createPlaceholder = (dateFrom, dateTo) => {
+  const format = (date) => {
+    return moment(date).format(`DD MMM`);
+  };
+
+  return `${format(dateFrom)} - ${format(dateTo)}`;
+};
+
+const getTasksBetweenDates = (tasks, dateFrom, dateTo) => tasks.
+  filter((task) => task.dueDate >= dateFrom && task.dueDate <= dateTo);
+
 /**
  * Generates statistics component HTML template
+ * @param {Array<Object>} tasks  - array of tasks
+ * @param {Date} dateFrom - start date
+ * @param {Date} dateTo - end date
  * @return {String} - template
  */
-const template = () => {
+const template = (tasks, dateFrom, dateTo) => {
+  const periodPlaceholder = createPlaceholder(dateFrom, dateTo);
+  const tasksCount = getTasksBetweenDates(tasks, dateFrom, dateTo).length;
+
   return (
     `<section class="statistic container">
         <div class="statistic__line">
@@ -13,13 +32,13 @@ const template = () => {
               <input
                 class="statistic__period-input"
                 type="text"
-                placeholder="01 Feb - 08 Feb"
+                placeholder="${periodPlaceholder}"
               />
             </div>
 
             <p class="statistic__period-result">
               In total for the specified period
-              <span class="statistic__task-found">0</span> tasks were fulfilled.
+              <span class="statistic__task-found">${tasksCount}</span> tasks were fulfilled.
             </p>
           </div>
           <div class="statistic__line-graphic">
