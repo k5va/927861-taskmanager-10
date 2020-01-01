@@ -49,8 +49,7 @@ export default class BoardController {
    * Renders tasks
    */
   render() {
-
-    const tasks = this._tasksModel.getTasks();
+    const tasks = this._tasksModel.getTasksAll();
 
     // check if there are tasks to render
     const isAllTasksArchived = tasks.every((task) => task.isArchive);
