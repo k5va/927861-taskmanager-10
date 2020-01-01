@@ -2,7 +2,6 @@ import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
 import {hasSomeBoolean} from "../../utils";
 import flatpickr from "flatpickr";
-import {parseFormData} from "./parse-form-data";
 import {isDescriptionValid} from "./is-description-valid";
 
 export default class TaskForm extends AbstractSmartComponent {
@@ -80,12 +79,12 @@ export default class TaskForm extends AbstractSmartComponent {
   }
 
   /**
-   * Returns task object created from task form's inputs.
-   * @return {*} - task object
+   * Returns task form's formdata.
+   * @return {FormData} - task object
    */
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
-    return parseFormData(new FormData(form));
+    return new FormData(form);
   }
 
   /**

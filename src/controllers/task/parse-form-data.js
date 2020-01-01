@@ -1,9 +1,10 @@
 import {WeekDay} from "../../consts";
+import {Task} from "../../models";
 
 /**
  * Creates task object from given form data
  * @param {FormData} formData - form data object
- * @return {*} - task object
+ * @return {Task} - task
  */
 const parseFormData = (formData) => {
   const repeatingDays = Object.values(WeekDay).reduce((acc, day) => {
@@ -12,16 +13,18 @@ const parseFormData = (formData) => {
   }, {});
   const date = formData.get(`date`);
 
-  return {
-    description: formData.get(`text`),
-    color: formData.get(`color`),
-    tags: new Set(formData.getAll(`hashtag`)),
-    dueDate: date ? new Date(date) : null,
-    repeatingDays: formData.getAll(`repeat`).reduce((acc, day) => {
-      acc[day] = true;
+  return new Task({
+    'description': formData.get(`text`),
+    'due_date': date ? new Date(date) : null,
+    'tags': formData.getAll(`hashtag`),
+    'repeating_days': formData.getAll(`repeat`).reduce((acc, it) => {
+      acc[it] = true;
       return acc;
     }, repeatingDays),
-  };
+    'color': formData.get(`color`),
+    'is_favorite': false,
+    'is_done': false,
+  });
 };
 
 export {parseFormData};
