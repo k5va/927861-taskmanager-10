@@ -44,6 +44,7 @@ menuComponent.setSelectHandler((menuItem) => {
       statisticsComponent.show();
       break;
     case MenuItem.TASKS:
+    default:
       statisticsComponent.hide();
       boardController.show();
       break;
