@@ -1,6 +1,8 @@
 import {TaskComponent, TaskFormComponent} from "../../components";
 import {render, replace, RenderPosition} from "../../utils";
 import {Color, WeekDay} from "../../consts";
+import {parseFormData} from "./parse-form-data";
+import {Task} from "../../models";
 
 export const RenderMode = {
   DEFAULT: `default`,
@@ -62,19 +64,24 @@ export default class TaskController {
 
     this._taskComponent.setEditHandler(() => {
       this._replaceTaskToEdit();
-
     });
 
     this._taskComponent.setArchiveHandler(() => {
-      this._onDataChange(this, task, Object.assign({}, task, {isArchive: !task.isArchive}));
+      const newTask = Task.clone(task);
+      newTask.isArchive = !newTask.isArchive;
+      this._onDataChange(this, task, newTask);
     });
 
     this._taskComponent.setFavoritesHandler(() => {
-      this._onDataChange(this, task, Object.assign({}, task, {isFavorite: !task.isFavorite}));
+      const newTask = Task.clone(task);
+      newTask.isFavorite = !newTask.isFavorite;
+      this._onDataChange(this, task, newTask);
     });
 
     this._taskEditComponent.setSubmitHandler(() => {
-      this._onDataChange(this, this._mode === RenderMode.ADD ? null : task, this._taskEditComponent.getData());
+      const newTask = parseFormData(this._taskEditComponent.getData());
+      newTask.id = task.id;
+      this._onDataChange(this, this._mode === RenderMode.ADD ? null : task, newTask);
       this._replaceEditToTask();
     });
 
