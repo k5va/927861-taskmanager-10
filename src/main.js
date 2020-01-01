@@ -1,20 +1,17 @@
 import {MenuComponent, BoardComponent, StatisticsComponent} from "./components";
-import {generateTasks} from "./mock/task";
 import {render} from "./utils";
 import {BoardController, FilterController} from "./controllers";
 import {TasksModel} from "./models";
-import {MenuItem, DEFAULT_STATISTICS_PERIOD} from "./consts";
+import {MenuItem, DEFAULT_STATISTICS_PERIOD, AUTHORIZATION, END_POINT} from "./consts";
 import moment from "moment";
-
-const TASK_COUNT = 22;
+import API from "./api";
 
 const mainElement = document.querySelector(`.main`);
 const controlElement = mainElement.querySelector(`.main__control`);
-const tasks = generateTasks(TASK_COUNT);
 const endDate = new Date();
 const startDate = moment().subtract(DEFAULT_STATISTICS_PERIOD, `d`).toDate();
+const api = new API(END_POINT, AUTHORIZATION);
 const tasksModel = new TasksModel();
-tasksModel.setTasks(tasks);
 
 // render site menu
 const menuComponent = new MenuComponent();
@@ -51,4 +48,10 @@ menuComponent.setSelectHandler((menuItem) => {
   }
 });
 
-boardController.render();
+api
+  .getTasks()
+  .then((tasks) => {
+    tasksModel.setTasks(tasks);
+    boardController.render();
+  });
+
