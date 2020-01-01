@@ -43,3 +43,8 @@ export const MenuItem = {
 export const DEFAULT_STATISTICS_PERIOD = 7;
 
 export const HIDDEN_CLASS = `visually-hidden`;
+
+export const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=`;
+
+export const END_POINT = `https://htmlacademy-es-10.appspot.com/task-manager`;
+
