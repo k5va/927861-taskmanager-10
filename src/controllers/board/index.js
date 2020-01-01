@@ -8,9 +8,11 @@ export default class BoardController {
    * Creates board controller instance
    * @param {Component} container - container component
    * @param {TasksModel} tasksModel - tasks model
+   * @param {API} api - server api
    */
-  constructor(container, tasksModel) {
+  constructor(container, tasksModel, api) {
     this._container = container;
+    this._api = api;
 
     this._tasksModel = tasksModel;
     this._showingTaskControllers = [];
@@ -49,23 +51,25 @@ export default class BoardController {
    * Renders tasks
    */
   render() {
-    const tasks = this._tasksModel.getTasksAll();
+    const tasks = this._tasksModel.getTasks();
 
     // check if there are tasks to render
-    const isAllTasksArchived = tasks.every((task) => task.isArchive);
-    if (isAllTasksArchived) {
+    this._noTasksComponent.removeElement();
+    if (tasks.length === 0) {
       render(this._container.getElement(), this._noTasksComponent);
       return;
     }
 
     // render sort component
+    this._sortComponent.removeElement();
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     render(this._container.getElement(), this._sortComponent);
 
     // render tasks
+    this._showingTasksCount = TASKS_PER_LOAD;
+    this._taskListComponent.removeElement();
     render(this._container.getElement(), this._taskListComponent);
-    this._showingTaskControllers = this._showingTaskControllers.concat(
-        this._renderTasks(this._tasksModel.getTasks().slice(0, this._showingTasksCount))
-    );
+    this._showingTaskControllers = this._renderTasks(this._tasksModel.getTasks().slice(0, this._showingTasksCount));
 
     // render load more button
     this._renderLoadMore();
@@ -134,7 +138,8 @@ export default class BoardController {
    */
   _onSortTypeChange(sortType) {
     this._tasksModel.setSortType(sortType);
-    this._updateTasksList();
+    // this._updateTasksList();
+    this.render();
   }
 
   /**
@@ -167,8 +172,16 @@ export default class BoardController {
     }
 
     if (oldTask && newTask) { // update task
-      this._tasksModel.updateTask(oldTask.id, newTask);
-      taskController.render(newTask);
+      this._api
+        .updateTask(newTask)
+        .then((task) => {
+          this._tasksModel.updateTask(task.id, task);
+          taskController.render(task);
+        })
+        .catch((error) => {
+          // shake
+          console.log(error);
+        });
       return;
     }
   }
@@ -184,7 +197,8 @@ export default class BoardController {
    * Handles filter change
    */
   _onFilterChange() {
-    this._updateTasksList();
+    // this._updateTasksList();
+    this.render();
   }
 
   /**

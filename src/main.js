@@ -23,7 +23,7 @@ filterController.render();
 const boardComponent = new BoardComponent();
 render(mainElement, boardComponent);
 // create board controller and render tasks
-const boardController = new BoardController(boardComponent, tasksModel);
+const boardController = new BoardController(boardComponent, tasksModel, api);
 // create statistics component and render
 const statisticsComponent = new StatisticsComponent(tasksModel.getTasks(), startDate, endDate);
 render(mainElement, statisticsComponent);
