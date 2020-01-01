@@ -41,3 +41,5 @@ export const MenuItem = {
 };
 
 export const DEFAULT_STATISTICS_PERIOD = 7;
+
+export const HIDDEN_CLASS = `visually-hidden`;
