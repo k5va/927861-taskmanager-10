@@ -38,6 +38,8 @@ export default class Tasks {
    */
   setTasks(tasks) {
     this._tasks = [...tasks];
+    // notify data change handlers
+    this._dataChangeHandlers.forEach((handler) => handler());
   }
 
   /**
