@@ -50,7 +50,7 @@ export default class TaskController {
 
   /**
    * Renders given task
-   * @param {*} task - task object
+   * @param {Task} task - task object
    * @param {String} mode - render mode
    */
   render(task, mode = RenderMode.DEFAULT) {
@@ -82,7 +82,7 @@ export default class TaskController {
       const newTask = parseFormData(this._taskEditComponent.getData());
       newTask.id = task.id;
       this._onDataChange(this, this._mode === RenderMode.ADD ? null : task, newTask);
-      this._replaceEditToTask();
+      this._replaceEditToTask(); // TODO: move to render when DEFAULT mode?
     });
 
     this._taskEditComponent.setDeleteHandler(() => {

@@ -153,31 +153,40 @@ export default class BoardController {
       if (taskController.mode === RenderMode.ADD) {
         this._addTaskController.destroy();
         this._addTaskController = null;
+        this._updateTasksList();
+        return;
       } else {
-        this._tasksModel.removeTask(oldTask.id);
+        this._api
+        .deleteTask(oldTask.id)
+        .then((id) => this._tasksModel.removeTask(id))
+        .then((_) => this._updateTasksList())
+        .catch((error) => {
+          console.log(error);
+        });
+        return;
       }
-      // render updated tasks list
-      this._updateTasksList();
-      return;
     }
 
     if (oldTask === null) { // add new task
-      this._addTaskController.destroy();
-      this._addTaskController = null;
-
-      this._tasksModel.addTask(newTask);
-      // render updated tasks list
-      this._updateTasksList();
+      this._api
+        .createTask(newTask)
+        .then((task) => this._tasksModel.addTask(task))
+        .then((_) => {
+          this._addTaskController.destroy();
+          this._addTaskController = null;
+          this._updateTasksList();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       return;
     }
 
     if (oldTask && newTask) { // update task
       this._api
         .updateTask(newTask)
-        .then((task) => {
-          this._tasksModel.updateTask(task.id, task);
-          taskController.render(task);
-        })
+        .then((task) => this._tasksModel.updateTask(task))
+        .then((task) => taskController.render(task))
         .catch((error) => {
           // shake
           console.log(error);
