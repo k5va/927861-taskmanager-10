@@ -60,10 +60,11 @@ export default class API {
   /**
    * Deletes task on server
    * @param {String} id - task id
-   * @return {Promise<Response>} - promise that resoves to server response if it is successfull
+   * @return {Promise<String>} - promise that resoves to deleted task id
    */
   deleteTask(id) {
-    return this._send({url: `tasks/${id}`, method: Method.DELETE});
+    return this._send({url: `tasks/${id}`, method: Method.DELETE})
+      .then((_) => id);
   }
 
   /**
