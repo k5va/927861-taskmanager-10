@@ -159,10 +159,8 @@ export default class BoardController {
         this._api
         .deleteTask(oldTask.id)
         .then((id) => this._tasksModel.removeTask(id))
-        .then((_) => this._updateTasksList())
-        .catch((error) => {
-          console.log(error);
-        });
+        .then(() => this._updateTasksList())
+        .catch(() => taskController.shake());
         return;
       }
     }
@@ -171,14 +169,12 @@ export default class BoardController {
       this._api
         .createTask(newTask)
         .then((task) => this._tasksModel.addTask(task))
-        .then((_) => {
+        .then(() => {
           this._addTaskController.destroy();
           this._addTaskController = null;
           this._updateTasksList();
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(() => taskController.shake());
       return;
     }
 
@@ -187,10 +183,7 @@ export default class BoardController {
         .updateTask(newTask)
         .then((task) => this._tasksModel.updateTask(task))
         .then((task) => taskController.render(task))
-        .catch((error) => {
-          // shake
-          console.log(error);
-        });
+        .catch(() => taskController.shake());
       return;
     }
   }

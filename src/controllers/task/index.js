@@ -79,13 +79,14 @@ export default class TaskController {
     });
 
     this._taskEditComponent.setSubmitHandler(() => {
+      this._taskEditComponent.setData({SAVE_TEXT: `Saving...`});
       const newTask = parseFormData(this._taskEditComponent.getData());
       newTask.id = task.id;
       this._onDataChange(this, this._mode === RenderMode.ADD ? null : task, newTask);
-      this._replaceEditToTask(); // TODO: move to render when DEFAULT mode?
     });
 
     this._taskEditComponent.setDeleteHandler(() => {
+      this._taskEditComponent.setData({DELETE_TEXT: `Deleting...`});
       document.removeEventListener(`keydown`, this._onEscKeyDown);
       this._onDataChange(this, task, null);
     });
@@ -96,6 +97,7 @@ export default class TaskController {
         if (oldTaskEditComponent && oldTaskComponent) {
           replace(this._taskComponent, oldTaskComponent);
           replace(this._taskEditComponent, oldTaskEditComponent);
+          this._replaceEditToTask();
         } else {
           render(this._container.getElement(), this._taskComponent);
         }
@@ -179,5 +181,18 @@ export default class TaskController {
   lock() {
     this.setDefaultView();
     this._taskComponent.lock();
+  }
+
+  /**
+   * Shakes task card
+   */
+  shake() {
+    if (this._mode === RenderMode.DEFAULT) {
+      this._taskComponent.shake();
+    } else {
+      this._taskEditComponent
+        .shake()
+        .then(() => this._taskEditComponent.setData({saveButtonText: `Save`, deleteButtonText: `Delete`}));
+    }
   }
 }
