@@ -48,3 +48,5 @@ export const AUTHORIZATION = `Basic dXNqweBwYXNzd29yZAo=`;
 
 export const END_POINT = `https://htmlacademy-es-10.appspot.com/task-manager`;
 
+export const SHAKE_ANIMATION_TIMEOUT = 600;
+
