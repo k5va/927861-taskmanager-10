@@ -4,6 +4,11 @@ import {hasSomeBoolean} from "../../utils";
 import flatpickr from "flatpickr";
 import {isDescriptionValid} from "./is-description-valid";
 
+const DefaultData = {
+  DELETE_TEXT: `Delete`,
+  SAVE_TEXT: `Save`,
+};
+
 export default class TaskForm extends AbstractSmartComponent {
   constructor(task) {
     super();
@@ -13,6 +18,7 @@ export default class TaskForm extends AbstractSmartComponent {
     this._isRepeatingTask = hasSomeBoolean(task.repeatingDays);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
     this._currentDescription = task.description;
+    this._externalData = DefaultData;
 
     this._submitHandler = null;
     this._deleteHandler = null;
@@ -33,8 +39,14 @@ export default class TaskForm extends AbstractSmartComponent {
       isDateShowing: this._isDateShowing,
       isRepeatingTask: this._isRepeatingTask,
       activeRepeatingDays: this._activeRepeatingDays,
-      currentDescription: this._currentDescription
+      currentDescription: this._currentDescription,
+      externalData: this._externalData
     });
+  }
+
+  setData(data) {
+    this._externalData = Object.assign({}, DefaultData, data);
+    this.rerender();
   }
 
   /**

@@ -12,7 +12,8 @@ import {Color} from "../../consts";
  */
 const template = (task, options = {}) => {
   const {tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription} = options;
+  const {isDateShowing, isRepeatingTask, activeRepeatingDays,
+    currentDescription, externalData} = options;
 
   const description = encode(currentDescription);
 
@@ -28,6 +29,9 @@ const template = (task, options = {}) => {
   const hashtagsMarkup = createHashTags(tags);
   const repeatingDaysMarkup = createRepeatingDays(activeRepeatingDays);
   const colorsMarkup = createColors(color, Object.values(Color));
+
+  const saveButtonText = externalData.SAVE_TEXT;
+  const deleteButtonText = externalData.DELETE_TEXT;
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -102,8 +106,8 @@ const template = (task, options = {}) => {
           </div>
 
           <div class="card__status-btns">
-            <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>save</button>
-            <button class="card__delete" type="button">delete</button>
+            <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>${saveButtonText}</button>
+            <button class="card__delete" type="button">${deleteButtonText}</button>
           </div>
         </div>
       </form>
