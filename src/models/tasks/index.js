@@ -1,6 +1,5 @@
 import {Filter, SortType} from "../../consts";
 import {FilterTasks} from "../../utils";
-
 import {sortTasks} from "./sort-tasks";
 
 export default class Tasks {
@@ -17,7 +16,7 @@ export default class Tasks {
 
   /**
    * Returns model's tasks filtered and sorted
-   * @return {Array} - array of tasks
+   * @return {Array<Task>} - array of tasks
    */
   getTasks() {
     return sortTasks(FilterTasks[this._filter](this._tasks), this._sortType);
@@ -25,7 +24,7 @@ export default class Tasks {
 
   /**
    * Returns initial array of tasks
-   * @return {Array} - array of tasks
+   * @return {Array<Task>} - array of tasks
    */
   getTasksAll() {
     return this._tasks;
@@ -34,7 +33,7 @@ export default class Tasks {
   /**
    * Sets model's tasks
    *
-   * @param {Iterable} tasks - tasks
+   * @param {Array<Task>} tasks - tasks
    */
   setTasks(tasks) {
     this._tasks = [...tasks];
@@ -44,51 +43,44 @@ export default class Tasks {
 
   /**
    * Add new task in model
-   * @param {*} task - task object
+   * @param {Task} task - task object
+   * @return {Task} - created task
    */
   addTask(task) {
     // create new copy of tasks array with new task added. Can be used later for undo operations
     this._tasks = [task, ...this._tasks];
     // notify data change handlers
     this._dataChangeHandlers.forEach((handler) => handler());
+
+    return task;
   }
 
   /**
    * Updates task in model
    *
-   * @param {String} id - task id
-   * @param {*} task - task object
-   * @return {Boolean} - true if model is successfully updated
+   * @param {Task} task - task object
+   * @return {Task} - updated task
    */
-  updateTask(id, task) {
-    const index = this._findTaskById(id);
-    if (index === -1) {
-      return false;
-    }
+  updateTask(task) {
+    const index = this._findTaskById(task.id);
     // create new copy of tasks array with updated task. Can be used later for undo operations
     this._tasks = [...this._tasks.slice(0, index), task, ...this._tasks.slice(index + 1)];
     // notify data change handlers
     this._dataChangeHandlers.forEach((handler) => handler());
 
-    return true;
+    return task;
   }
 
   /**
    * Removes task with given id from the model
    * @param {String} id - task id
-   * @return {Boolean} - true if task is successfully remove
    */
   removeTask(id) {
     const index = this._findTaskById(id);
-    if (index === -1) {
-      return false;
-    }
     // create new copy of tasks array without removed task. Can be used later for undo operations
     this._tasks = [...this._tasks.slice(0, index), ...this._tasks.slice(index + 1)];
     // notify data change handlers
     this._dataChangeHandlers.forEach((handler) => handler());
-
-    return true;
   }
 
   /**
@@ -131,6 +123,11 @@ export default class Tasks {
    * @return {Number} - task'is index or -1
    */
   _findTaskById(id) {
-    return this._tasks.findIndex((it) => it.id === id);
+    const index = this._tasks.findIndex((it) => it.id === id);
+    if (index === -1) {
+      throw new Error(`Task with id ${id} is not found in model`);
+    }
+
+    return index;
   }
 }
